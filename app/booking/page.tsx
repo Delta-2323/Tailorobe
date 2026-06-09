@@ -40,6 +40,7 @@ function isWeekend(dateStr: string): boolean {
 type FormState = {
   customerName: string;
   customerPhone: string;
+  customerEmail?: string;
   serviceType: string;
   locationType: string;
   remoteLocation: string;
@@ -51,6 +52,7 @@ type FormState = {
 const emptyForm: FormState = {
   customerName: "",
   customerPhone: "",
+  customerEmail: "",
   serviceType: "",
   locationType: "store",
   remoteLocation: "",
@@ -90,6 +92,16 @@ export default function Booking() {
       toast({ title: "Missing Details", description: "Please fill in your name and phone number.", variant: "destructive" });
       return;
     }
+
+    if (!form.customerEmail) {
+  toast({
+    title: "Missing Details",
+    description: "Please enter your email address.",
+    variant: "destructive",
+  });
+  return;
+}
+
     if (!form.serviceType) {
       toast({ title: "Select a Service", description: "Please choose the type of service you need.", variant: "destructive" });
       return;
@@ -108,6 +120,7 @@ export default function Booking() {
       await insertAppointment({
         customer_name: form.customerName,
         customer_phone: form.customerPhone,
+        customer_email: form.customerEmail || undefined,
         service_type: form.serviceType,
         location_type: form.locationType,
         remote_location: form.remoteLocation || undefined,
@@ -129,6 +142,7 @@ export default function Booking() {
           appointmentDate: form.appointmentDate,
           appointmentTime: form.appointmentTime,
           notes: form.notes || undefined,
+          customerEmail: form.customerEmail || undefined,
         }),
       }).catch((err) => console.warn("Email notification failed (non-blocking):", err));
 
@@ -196,6 +210,10 @@ export default function Booking() {
               <div className="sm:col-span-2">
                 <Label htmlFor="phone">Phone Number *</Label>
                 <Input id="phone" value={form.customerPhone} onChange={(e) => setForm({ ...form, customerPhone: e.target.value })} placeholder="0400 000 000" className="mt-2" />
+              </div>
+              <div className="sm:col-span-2">
+                <Label htmlFor="email">Email Address *</Label>
+                <Input id="email" value={form.customerEmail} onChange={(e) => setForm({ ...form, customerEmail: e.target.value })} placeholder="john.smith@example.com" className="mt-2" />
               </div>
             </div>
           </div>
@@ -314,6 +332,7 @@ export default function Booking() {
               <div className="grid grid-cols-2 gap-y-2 text-sm">
                 {form.customerName && <><span className="text-muted-foreground">Name:</span><span className="font-medium">{form.customerName}</span></>}
                 {form.customerPhone && <><span className="text-muted-foreground">Phone:</span><span className="font-medium">{form.customerPhone}</span></>}
+                {form.customerEmail && <><span className="text-muted-foreground">Email:</span><span className="font-medium">{form.customerEmail}</span></>}
                 {form.serviceType && <><span className="text-muted-foreground">Service:</span><span className="font-medium">{form.serviceType}</span></>}
                 {form.locationType && <><span className="text-muted-foreground">Type:</span><span className="font-medium">{form.locationType === "store" ? "In Store" : "Remote"}</span></>}
                 {form.locationType === "remote" && form.remoteLocation && <><span className="text-muted-foreground">Location:</span><span className="font-medium">{form.remoteLocation}</span></>}
