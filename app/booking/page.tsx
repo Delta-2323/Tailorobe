@@ -48,7 +48,6 @@ type FormState = {
   appointmentTime: string;
   notes: string;
 };
-
 const emptyForm: FormState = {
   customerName: "",
   customerPhone: "",
@@ -120,7 +119,7 @@ export default function Booking() {
       await insertAppointment({
         customer_name: form.customerName,
         customer_phone: form.customerPhone,
-        customer_email: form.customerEmail || undefined,
+        //customer_email: form.customerEmail || undefined,
         service_type: form.serviceType,
         location_type: form.locationType,
         remote_location: form.remoteLocation || undefined,
