@@ -1,13 +1,47 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { Providers } from "./providers";
-import { SiteLayout } from "@/components/site-layout";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+import "./globals.css";
+
+import { Providers } from "./providers";
+import { SiteLayout } from "@/components/site-layout";
+
 export const metadata: Metadata = {
-  title: "Tailorobe Bespoke Tailors | Adelaide",
+  title: "Tailorobe | Bespoke Tailors Adelaide",
   description:
-    "Adelaide's premier destination for bespoke tailoring. Crafting elegant, made-to-measure garments for your unique silhouette.",
+    "Tailorobe offers premium bespoke tailoring in Adelaide. Custom suits, dresses, and made-to-measure garments crafted for your perfect fit.",
+
+  keywords: [
+    "tailor adelaide",
+    "bespoke tailoring adelaide",
+    "custom suits adelaide",
+    "made to measure suits",
+    "Tailorobe",
+  ],
+
+  authors: [{ name: "Tailorobe" }],
+  creator: "Tailorobe",
+
+  openGraph: {
+    title: "Tailorobe | Bespoke Tailors Adelaide",
+    description:
+      "Premium bespoke tailoring in Adelaide. Custom suits and made-to-measure garments.",
+    url: "https://www.tailorobe.com.au",
+    siteName: "Tailorobe",
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Tailorobe | Bespoke Tailors Adelaide",
+    description:
+      "Premium bespoke tailoring in Adelaide.",
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -19,14 +53,33 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <script
-          src="https://static.elfsight.com/platform/platform.js"
-          async
-        />
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      name: "Tailorobe",
+      url: "https://www.tailorobe.com.au",
+      image: "https://www.tailorobe.com.au/logo.png",
+      description:
+        "Premium bespoke tailoring in Adelaide. Custom suits and made-to-measure garments.",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Adelaide",
+        addressCountry: "AU",
+      },
+      areaServed: "Adelaide",
+      priceRange: "$$$",
+    }),
+  }}
+/>
       </head>
+
       <body>
         <Providers>
           <SiteLayout>{children}</SiteLayout>
         </Providers>
+
         <SpeedInsights />
       </body>
     </html>
