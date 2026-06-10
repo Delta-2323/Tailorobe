@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { SiteLayout } from "@/components/site-layout";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Tailorobe Bespoke Tailors | Adelaide",
@@ -26,6 +27,7 @@ export default function RootLayout({
         <Providers>
           <SiteLayout>{children}</SiteLayout>
         </Providers>
+        <SpeedInsights />
       </body>
     </html>
   );
