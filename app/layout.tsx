@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-<<<<<<< HEAD
 import { Analytics } from "@vercel/analytics/next";
-=======
-import { Analytics } from "@vercel/analytics/next"
->>>>>>> 600e9b3 (Add Vercel Analytics)
 
 import "./globals.css";
 
