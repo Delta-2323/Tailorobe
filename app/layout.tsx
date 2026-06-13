@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+<<<<<<< HEAD
 import { Analytics } from "@vercel/analytics/next";
+=======
+import { Analytics } from "@vercel/analytics/next"
+>>>>>>> 600e9b3 (Add Vercel Analytics)
 
 import "./globals.css";
 
@@ -77,13 +81,13 @@ export default function RootLayout({
       </head>
 
       <body>
-        <Providers>
-          <SiteLayout>{children}</SiteLayout>
-        </Providers>
+  <Providers>
+    <SiteLayout>{children}</SiteLayout>
+  </Providers>
 
-        <Analytics />
-        <SpeedInsights />
-      </body>
+  <Analytics />
+  <SpeedInsights />
+</body>
     </html>
   );
 }
