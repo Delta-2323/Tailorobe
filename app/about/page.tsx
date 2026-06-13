@@ -89,13 +89,17 @@ export default function About() {
         extensive customization options, and commitment to craftsmanship. His vision is to expand Tailorobe across Australia, helping more men experience the confidence of wearing perfectly tailored clothing.
       </p>
 
-      <div className="bg-card border border-border rounded-xl p-6">
-        <p className="text-sm text-muted-foreground mb-2">Founder</p>
-        <p className="text-xl font-display text-primary">Tailorobe Bespoke</p>
-        <p className="text-sm text-muted-foreground mt-2">
+      <div className="bg-card border border-border rounded-xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+      <p className="text-sm text-muted-foreground mb-2">
+          Founder
+      </p>
+      <p className="text-xl font-display text-primary">
+          Tailorobe Bespoke
+      </p>
+      <p className="text-sm text-muted-foreground mt-2">
           Adelaide, South Australia
-        </p>
-      </div>
+      </p>
+    </div>
     </motion.div>
   </div>
 </section>
