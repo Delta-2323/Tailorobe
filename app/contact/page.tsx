@@ -26,24 +26,23 @@ export default function Contact() {
       await insertContact({
         name: form.name,
         email: form.email,
-        phone: form.phone || undefined,
+        phone: form.phone,
         subject: form.subject,
         message: form.message,
       });
 
       // 2. Send emails — notify store + auto-reply to customer
-      fetch("/api/send-contact-email", {
+     await fetch("/api/send-contact-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: form.phone || undefined,
-          subject: form.subject,
-          message: form.message,
-        }),
-      }).catch((err) => console.warn("Email notification failed (non-blocking):", err));
-
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: form.subject,
+        message: form.message,
+  }),
+});
       toast({ title: "Message Sent", description: "Thank you for reaching out. We will be in touch within 24 hours." });
       setForm({ name: "", email: "", phone: "", subject: "", message: "" });
     } catch {

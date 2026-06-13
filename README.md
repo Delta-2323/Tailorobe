@@ -35,7 +35,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
   - View all appointments, messages, and manage status
 
 ## Email Notifications
-Every new appointment, contact message, and suit design order sends a full-detail email to `infotailorobe@gmail.com` via Gmail.
+Every new appointment, contact message, and suit design order sends a full-detail email to `info@tailorobe.com.au` via Gmail.
 
 ## Database
 Uses **Supabase** (same credentials as above). Schema is in `supabase_schema.sql`.

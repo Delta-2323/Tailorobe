@@ -47,6 +47,59 @@ export default function About() {
         </div>
       </section>
 
+      {/* Founder Section */}
+<section className="py-24 bg-background">
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-16 items-center">
+
+    {/* Image */}
+    <motion.div
+      initial={{ opacity: 0, x: -40 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+      className="rounded-2xl overflow-hidden shadow-2xl aspect-[3/4]"
+    >
+      <img
+        src="/gallery/girish.jpeg"
+        alt="Founder of Tailorobe"
+        className="w-full h-full object-cover"
+      />
+    </motion.div>
+
+    {/* Content */}
+    <motion.div
+      initial={{ opacity: 0, x: 40 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+    >
+      <h2 className="font-display text-4xl text-primary mb-6">Meet the Founder</h2>
+      <div className="w-16 h-1 bg-accent mb-8" />
+
+      <p className="text-muted-foreground leading-relaxed mb-6">
+        Tailorobe was founded by Girish Khanna, a passionate entrepreneur with a deep love for fashion and a strong eye for detail. 
+       </p>
+        <p className="text-muted-foreground leading-relaxed mb-6">
+        At just 26, he identified a gap in the market where men struggled to find well-fitted, high-quality clothing without paying 
+        premium prices. With a background in the corporate sector and a strong understanding of customer needs, he set out to create a 
+        brand that delivers a made-to-measure experience at ready-to-wear prices.
+        </p>
+        <p className="text-muted-foreground leading-relaxed mb-6">
+        Under his leadership, Tailorobe has grown into a trusted name in Adelaide’s fashion scene, known for its personalized service, 
+        extensive customization options, and commitment to craftsmanship. His vision is to expand Tailorobe across Australia, helping more men experience the confidence of wearing perfectly tailored clothing.
+      </p>
+
+      <div className="bg-card border border-border rounded-xl p-6">
+        <p className="text-sm text-muted-foreground mb-2">Founder</p>
+        <p className="text-xl font-display text-primary">Tailorobe Bespoke</p>
+        <p className="text-sm text-muted-foreground mt-2">
+          Adelaide, South Australia
+        </p>
+      </div>
+    </motion.div>
+  </div>
+</section>
+
       {/* Values */}
       <section className="py-24 bg-secondary">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

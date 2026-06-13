@@ -74,7 +74,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
         <div className="flex gap-6 max-w-7xl mx-auto w-full">
           <span className="flex items-center gap-2"><MapPin size={14} /> Shop 3/196 Marion Road, West Richmond, Adelaide SA 5033</span>
           <a href="tel:0414053773" className="flex items-center gap-2 hover:text-accent transition-colors"><Phone size={14} /> 0414 053 773</a>
-          <a href="mailto:infotailorobe@gmail.com" className="flex items-center gap-2 ml-auto hover:text-accent transition-colors"><Mail size={14} /> infotailorobe@gmail.com</a>
+          <a href="mailto:info@tailorobe.com.au" className="flex items-center gap-2 ml-auto hover:text-accent transition-colors"><Mail size={14} /> info@tailorobe.com.au</a>
         </div>
       </div>
 
@@ -179,7 +179,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
               <li>Shop 3/196 Marion Road</li>
               <li>West Richmond, Adelaide SA 5033</li>
               <li className="pt-2"><a href="tel:0414053773" className="hover:text-accent transition-colors">0414 053 773</a></li>
-              <li><a href="mailto:infotailorobe@gmail.com" className="hover:text-accent transition-colors">infotailorobe@gmail.com</a></li>
+              <li><a href="mailto:info@tailorobe.com.au" className="hover:text-accent transition-colors">info@tailorobe.com.au</a></li>
               <li className="pt-2">Mon – Fri: 12:00 PM – 7:00 PM</li>
               <li>Weekends: 10:00 AM – 5:00 PM</li>
             </ul>

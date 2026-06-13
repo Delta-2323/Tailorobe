@@ -37,6 +37,32 @@ function isWeekend(dateStr: string): boolean {
   return day === 0 || day === 6;
 }
 
+function isPastTime(dateStr: string, timeStr: string): boolean {
+  if (!dateStr) return false;
+
+  const today = new Date();
+  const selectedDate = new Date(dateStr + "T00:00:00");
+
+  if (
+    selectedDate.getFullYear() !== today.getFullYear() ||
+    selectedDate.getMonth() !== today.getMonth() ||
+    selectedDate.getDate() !== today.getDate()
+  ) {
+    return false;
+  }
+
+  const [time, period] = timeStr.split(" ");
+  let [hours, minutes] = time.split(":").map(Number);
+
+  if (period === "PM" && hours !== 12) hours += 12;
+  if (period === "AM" && hours === 12) hours = 0;
+
+  const slotTime = new Date(selectedDate);
+  slotTime.setHours(hours, minutes, 0, 0);
+
+  return slotTime <= today;
+}
+
 type FormState = {
   customerName: string;
   customerPhone: string;
@@ -292,16 +318,18 @@ export default function Booking() {
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                     {timeSlots.map((t) => {
                       const isBooked = bookedSlots.includes(t);
+                      const isPast = isPastTime(form.appointmentDate, t);
+                      const isDisabled = isBooked || isPast;
                       const isSelected = form.appointmentTime === t;
                       return (
                         <button
                           type="button"
                           key={t}
-                          disabled={isBooked}
-                          onClick={() => !isBooked && setForm({ ...form, appointmentTime: t })}
+                          disabled={isDisabled}
+                          onClick={() => !isDisabled && setForm({ ...form, appointmentTime: t })}
                           className={cn(
                             "py-2.5 px-3 rounded-lg border text-sm font-medium transition-all",
-                            isBooked
+                            isDisabled
                               ? "bg-muted border-border text-muted-foreground cursor-not-allowed opacity-50 line-through"
                               : isSelected
                               ? "bg-primary text-white border-primary"
