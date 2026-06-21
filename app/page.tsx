@@ -1,9 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  MotionValue,
+} from "framer-motion";
 import { Scissors, Ruler, Sparkles, ArrowRight } from "lucide-react";
+import Script from "next/script";
 
 const PREVIEW_IMAGES = [
   "gallery-01.jpg",
@@ -16,66 +24,175 @@ const PREVIEW_IMAGES = [
   "gallery-11.jpg",
 ];
 
+/**
+ * SCROLL-LINKED HERO
+ * ───────────────────
+ * The hero image is treated like a bolt of fabric being measured, cut,
+ * and pressed into its final shape as you scroll past it.
+ *
+ * useScroll() tracks scroll progress against a target element (the hero
+ * section), returning a MotionValue (0 → 1) for how far you've scrolled
+ * through it. useTransform() then maps that single progress value onto
+ * several different properties continuously — not as discrete steps, but
+ * as one smooth, ongoing morph. useSpring() smooths the raw scroll value
+ * so the motion has a bit of tailored "weight" to it instead of feeling
+ * like it's glued 1:1 to the scrollbar.
+ */
+function ScrollMorphHero() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // Track scroll progress through the hero section specifically.
+  // offset: animation starts the instant the hero enters the viewport
+  // and finishes by the time its top has scrolled past the top of the screen.
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Smooth out the raw progress value for a more tactile, weighted feel.
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 24,
+    mass: 0.4,
+  });
+
+  // The image starts slightly oversized/desaturated ("raw fabric") and
+  // is progressively scaled, sharpened in color, and skewed — like
+  // material being squared up on a cutting table — as you scroll.
+  const imageScale = useTransform(smoothProgress, [0, 1], [1.15, 1.4]);
+  const imageSkew = useTransform(smoothProgress, [0, 1], [0, -3]);
+  const imageY = useTransform(smoothProgress, [0, 1], ["0%", "18%"]);
+  const imageSaturate = useTransform(smoothProgress, [0, 1], [0.4, 1.15]);
+  const imageBrightness = useTransform(smoothProgress, [0, 1], [0.7, 1]);
+  const imageFilter = useTransform(
+    [imageSaturate, imageBrightness] as [MotionValue<number>, MotionValue<number>],
+    ([s, b]) => `saturate(${s}) brightness(${b})`
+  );
+
+  // The dark overlay clears as the "fabric" comes into focus.
+  const overlayOpacity = useTransform(smoothProgress, [0, 0.6, 1], [0.55, 0.3, 0]);
+
+  // Headline drifts upward and fades as you commit to scrolling past it —
+  // a different rate than the image, so the two layers separate (parallax).
+  const headlineY = useTransform(smoothProgress, [0, 1], ["0%", "-40%"]);
+  const headlineOpacity = useTransform(smoothProgress, [0, 0.7], [1, 0]);
+
+  // A thin "tailor's tape" measure line draws itself across the hero as
+  // you scroll — width and rotation both continuously tied to progress.
+  const tapeWidth = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
+  const tapeRotate = useTransform(smoothProgress, [0, 1], [0, 1.5]);
+
+  return (
+    <section
+      ref={heroRef}
+      className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden"
+    >
+      <motion.div
+        className="absolute inset-0 z-0"
+        style={{
+          scale: imageScale,
+          skewY: imageSkew,
+          y: imageY,
+          filter: imageFilter,
+        }}
+      >
+        <img
+          src="https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=2000&auto=format&fit=crop"
+          alt="Bespoke Tailoring"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/60 mix-blend-multiply" />
+      </motion.div>
+
+      <motion.div
+        className="absolute inset-0 bg-black/30 z-[1] pointer-events-none"
+        style={{ opacity: overlayOpacity }}
+      />
+
+      {/* Tailor's tape measure — draws across the hero as you scroll */}
+      <motion.div
+        className="absolute left-0 top-1/2 z-[2] h-[2px] bg-accent/70 origin-left pointer-events-none"
+        style={{ width: tapeWidth, rotate: tapeRotate }}
+      />
+
+      <motion.div
+        className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16"
+        style={{ y: headlineY, opacity: headlineOpacity }}
+      >
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="font-display text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
+        >
+          The Art of <br />
+          <span className="text-gold-gradient italic">Perfect Proportion</span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto font-light"
+        >
+          Bespoke tailoring in the heart of Adelaide. Experience garments
+          crafted with meticulous precision for your unique silhouette.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+        >
+          <Link href="/builder">
+            <Button
+              size="lg"
+              variant="accent"
+              className="w-full sm:w-auto font-semibold uppercase tracking-wider"
+            >
+              Create Your Suit
+            </Button>
+          </Link>
+          <Link href="/booking">
+            <Button
+              size="lg"
+              className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 font-semibold uppercase tracking-wider"
+            >
+              Book a Fitting
+            </Button>
+          </Link>
+        </motion.div>
+      </motion.div>
+
+      {/* Scroll cue */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-white/70"
+        style={{ opacity: headlineOpacity }}
+      >
+        <span className="text-[10px] uppercase tracking-[0.3em]"></span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          className="w-px h-8 bg-white/50"
+        />
+      </motion.div>
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <div className="w-full">
-      {/* Hero */}
-      <section className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img
-            src="https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=2000&auto=format&fit=crop"
-            alt="Bespoke Tailoring"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/60 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-black/30" />
-        </div>
-
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="font-display text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
-          >
-            The Art of <br />
-            <span className="text-gold-gradient italic">Perfect Proportion</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto font-light"
-          >
-            Bespoke tailoring in the heart of Adelaide. Experience garments crafted with meticulous precision for your unique silhouette.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <Link href="/builder">
-              <Button size="lg" variant="accent" className="w-full sm:w-auto font-semibold uppercase tracking-wider">
-                Create Your Suit
-              </Button>
-            </Link>
-            <Link href="/booking">
-              <Button size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 font-semibold uppercase tracking-wider">
-                Book a Fitting
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
+      <ScrollMorphHero />
 
       {/* Features Section */}
       <section className="py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl text-primary mb-4">The Tailorobe Difference</h2>
+            <h2 className="font-display text-4xl text-primary mb-4">
+              The Tailorobe Difference
+            </h2>
             <div className="w-24 h-1 bg-accent mx-auto" />
           </div>
 
@@ -87,9 +204,12 @@ export default function Home() {
               <div className="w-16 h-16 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-6 text-primary">
                 <Scissors size={32} />
               </div>
-              <h3 className="font-display text-2xl mb-4">Master Craftsmanship</h3>
+              <h3 className="font-display text-2xl mb-4">
+                Master Craftsmanship
+              </h3>
               <p className="text-muted-foreground leading-relaxed">
-                Every stitch is placed with intention by our master tailors. We combine traditional techniques with modern aesthetics.
+                Every stitch is placed with intention by our master tailors.
+                We combine traditional techniques with modern aesthetics.
               </p>
             </motion.div>
 
@@ -103,9 +223,12 @@ export default function Home() {
               <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6 text-accent relative z-10">
                 <Ruler size={32} />
               </div>
-              <h3 className="font-display text-2xl mb-4 relative z-10">True Bespoke Fit</h3>
+              <h3 className="font-display text-2xl mb-4 relative z-10">
+                True Bespoke Fit
+              </h3>
               <p className="text-white/80 leading-relaxed relative z-10">
-                Over 30 precise measurements are taken to construct a pattern that is uniquely yours, guaranteeing a flawless silhouette.
+                Over 30 precise measurements are taken to construct a pattern
+                that is uniquely yours, guaranteeing a flawless silhouette.
               </p>
             </motion.div>
 
@@ -116,9 +239,12 @@ export default function Home() {
               <div className="w-16 h-16 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-6 text-primary">
                 <Sparkles size={32} />
               </div>
-              <h3 className="font-display text-2xl mb-4">Infinite Personalization</h3>
+              <h3 className="font-display text-2xl mb-4">
+                Infinite Personalization
+              </h3>
               <p className="text-muted-foreground leading-relaxed">
-                From premium Italian fabrics to monogramming and custom linings, every detail is selected by you.
+                From premium Italian fabrics to monogramming and custom
+                linings, every detail is selected by you.
               </p>
             </motion.div>
           </div>
@@ -129,8 +255,12 @@ export default function Home() {
       <section className="py-24 bg-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <p className="text-accent text-sm font-semibold uppercase tracking-[0.25em] mb-3">Our Work</p>
-            <h2 className="font-display text-4xl text-primary mb-4">From the Store</h2>
+            <p className="text-accent text-sm font-semibold uppercase tracking-[0.25em] mb-3">
+              Our Work
+            </p>
+            <h2 className="font-display text-4xl text-primary mb-4">
+              From the Store
+            </h2>
             <div className="w-24 h-1 bg-accent mx-auto" />
           </div>
 
@@ -161,7 +291,10 @@ export default function Home() {
             <Link href="/gallery">
               <Button size="lg" className="group font-semibold uppercase tracking-wider">
                 View Full Gallery
-                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                <ArrowRight
+                  className="ml-2 group-hover:translate-x-1 transition-transform"
+                  size={18}
+                />
               </Button>
             </Link>
           </div>
@@ -176,14 +309,24 @@ export default function Home() {
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <p className="text-accent text-sm font-semibold uppercase tracking-[0.25em] mb-3">Client Experiences</p>
-            <h2 className="font-display text-4xl md:text-5xl text-white mb-6">Trusted by Gentlemen Across Adelaide</h2>
+            <p className="text-accent text-sm font-semibold uppercase tracking-[0.25em] mb-3">
+              Client Experiences
+            </p>
+            <h2 className="font-display text-4xl md:text-5xl text-white mb-6">
+              Trusted by Gentlemen Across Adelaide
+            </h2>
             <div className="w-24 h-1 bg-accent mx-auto mt-6" />
           </div>
           <div className="relative w-full min-h-[400px] rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-4">
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-accent/20 to-transparent" />
             <div className="relative z-10 w-full h-full">
-              <div className="elfsight-app-6de8529b-2822-41b5-935f-cf2712163f6e" data-elfsight-app-lazy />
+              <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-white shadow-2xl">
+                <div className="elfsight-app-6de8529b-2822-41b5-935f-cf2712163f6e" />
+                <Script
+                  src="https://static.elfsight.com/platform/platform.js"
+                  strategy="afterInteractive"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -193,13 +336,25 @@ export default function Home() {
       <section className="py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-16">
           <div className="md:w-1/2">
-            <h2 className="font-display text-4xl text-primary mb-6">Design Your Masterpiece</h2>
+            <h2 className="font-display text-4xl text-primary mb-6">
+              Design Your Masterpiece
+            </h2>
             <p className="text-lg text-foreground/80 mb-8 leading-relaxed">
-              Use our interactive Suit Builder to customise every aspect of your garment. Select your fabric, cut, lapels, buttons, and finishing touches online before you even step foot in our store.
+              Use our interactive Suit Builder to customise every aspect of
+              your garment. Select your fabric, cut, lapels, buttons, and
+              finishing touches online before you even step foot in our
+              store.
             </p>
             <ul className="space-y-4 mb-8">
-              {["Over 500 premium fabrics", "Endless styling combinations", "Real-time design specifications"].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-foreground font-medium">
+              {[
+                "Over 500 premium fabrics",
+                "Endless styling combinations",
+                "Real-time design specifications",
+              ].map((item, i) => (
+                <li
+                  key={i}
+                  className="flex items-center gap-3 text-foreground font-medium"
+                >
                   <div className="w-2 h-2 rounded-full bg-accent" />
                   {item}
                 </li>
@@ -208,14 +363,21 @@ export default function Home() {
             <Link href="/builder">
               <Button size="lg" className="group">
                 Start Designing
-                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                <ArrowRight
+                  className="ml-2 group-hover:translate-x-1 transition-transform"
+                  size={18}
+                />
               </Button>
             </Link>
           </div>
 
           <div className="md:w-1/2 relative">
             <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
-              <img src="/gallery/design.jpg" alt="Elegant suit tailoring guide" className="w-full h-full object-cover" />
+              <img
+                src="/gallery/design.jpg"
+                alt="Elegant suit tailoring guide"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="absolute -bottom-8 -left-8 bg-card p-6 rounded-xl shadow-xl border border-border/50 max-w-xs hidden md:block">
               <p className="font-display text-xl text-primary italic">
