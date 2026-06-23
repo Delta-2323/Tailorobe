@@ -156,7 +156,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
               <a href="https://www.instagram.com/tailorobe" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors">
                 <IconInstagram size={18} />
               </a>
-              <a href="https://www.facebook.com/tailorobe" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors">
+              <a href="https://www.facebook.com/bespoke.tailorobe" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors">
                 <IconFacebook size={18} />
               </a>
               <a href="https://www.tiktok.com/@tailorobe" target="_blank" rel="noopener noreferrer" aria-label="Follow us on TikTok" className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors">

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, Phone, Clock } from "lucide-react";
+import { MapPin, Phone, Timer } from "lucide-react";
 
 export default function About() {
   return (
@@ -150,7 +150,7 @@ export default function About() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Clock className="text-accent mt-0.5 flex-shrink-0" size={20} />
+                <Timer className="text-accent mt-0.5 flex-shrink-0" size={20} />
                 <div className="text-left">
                   <p className="font-semibold text-foreground mb-1">Opening Hours</p>
                   <p>Mon – Fri: 12:00 PM – 7:00 PM</p>

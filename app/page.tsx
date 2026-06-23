@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+//import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   motion,
@@ -39,15 +39,11 @@ const PREVIEW_IMAGES = [
  * like it's glued 1:1 to the scrollbar.
  */
 function ScrollMorphHero() {
-  const heroRef = useRef<HTMLDivElement>(null);
+const { scrollY } = useScroll();
 
-  // Track scroll progress through the hero section specifically.
-  // offset: animation starts the instant the hero enters the viewport
-  // and finishes by the time its top has scrolled past the top of the screen.
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
+const scrollYProgress = useTransform(scrollY, [0, 700], [0, 1], {
+  clamp: true,
+});
 
   // Smooth out the raw progress value for a more tactile, weighted feel.
   const smoothProgress = useSpring(scrollYProgress, {
@@ -69,24 +65,16 @@ function ScrollMorphHero() {
     ([s, b]) => `saturate(${s}) brightness(${b})`
   );
 
-  // The dark overlay clears as the "fabric" comes into focus.
   const overlayOpacity = useTransform(smoothProgress, [0, 0.6, 1], [0.55, 0.3, 0]);
 
-  // Headline drifts upward and fades as you commit to scrolling past it —
-  // a different rate than the image, so the two layers separate (parallax).
   const headlineY = useTransform(smoothProgress, [0, 1], ["0%", "-40%"]);
   const headlineOpacity = useTransform(smoothProgress, [0, 0.7], [1, 0]);
 
-  // A thin "tailor's tape" measure line draws itself across the hero as
-  // you scroll — width and rotation both continuously tied to progress.
   const tapeWidth = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
   const tapeRotate = useTransform(smoothProgress, [0, 1], [0, 1.5]);
 
   return (
-    <section
-      ref={heroRef}
-      className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden"
-    >
+    <section className="relative h-[85vh] min-h-[600px] flex items-center justify-center overflow-hidden">
       <motion.div
         className="absolute inset-0 z-0"
         style={{
@@ -109,7 +97,6 @@ function ScrollMorphHero() {
         style={{ opacity: overlayOpacity }}
       />
 
-      {/* Tailor's tape measure — draws across the hero as you scroll */}
       <motion.div
         className="absolute left-0 top-1/2 z-[2] h-[2px] bg-accent/70 origin-left pointer-events-none"
         style={{ width: tapeWidth, rotate: tapeRotate }}
@@ -183,7 +170,7 @@ function ScrollMorphHero() {
 
 export default function Home() {
   return (
-    <div className="w-full">
+    <div className="relative w-full">
       <ScrollMorphHero />
 
       {/* Features Section */}
@@ -320,13 +307,18 @@ export default function Home() {
           <div className="relative w-full min-h-[400px] rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl p-4">
             <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-accent/20 to-transparent" />
             <div className="relative z-10 w-full h-full">
-              <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-white shadow-2xl">
-                <div className="elfsight-app-6de8529b-2822-41b5-935f-cf2712163f6e" />
-                <Script
-                  src="https://static.elfsight.com/platform/platform.js"
-                  strategy="afterInteractive"
-                />
-              </div>
+            <div className="relative w-full rounded-2xl overflow-hidden border border-white/10 bg-white shadow-2xl p-4">
+  <div
+    data-google-widget=""
+    data-embed-id="6faadd15b11d336c"
+  />
+
+  <Script
+    id="socialmediafeeds-google-widget"
+    src="https://socialmediafeeds.com/embed/widget.js"
+    strategy="afterInteractive"
+  />
+</div>
             </div>
           </div>
         </div>

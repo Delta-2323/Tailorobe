@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Timer } from "lucide-react";
 import { insertContact } from "@/lib/db";
 
 export default function Contact() {
@@ -88,7 +88,7 @@ export default function Contact() {
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary"><Clock size={20} /></div>
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary"><Timer size={20} /></div>
                 <div>
                   <h4 className="font-semibold mb-1">Opening Hours</h4>
                   <p className="text-muted-foreground">Monday – Friday: 12:00 PM – 7:00 PM<br />Weekends: 10:00 AM – 5:00 PM</p>

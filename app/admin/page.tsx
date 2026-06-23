@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Calendar, MessageSquare, LogOut, BarChart3, CheckCircle, Clock, Images } from "lucide-react";
+import { Users, Calendar, MessageSquare, LogOut, BarChart3, CheckCircle, Timer, Images } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { fetchAppointments, fetchContacts, updateAppointmentStatus, type Appointment, type ContactMessage } from "@/lib/db";
+import { Timer as ThreeTimer } from "three";
 
 const ADMIN_PIN = "1234";
 
@@ -167,7 +168,7 @@ export default function Admin() {
               <h2 className="font-display text-2xl text-primary mb-6">Overview</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 <StatCard icon={<Calendar size={20} />} label="Total Appointments" value={appointments.length} color="bg-primary" />
-                <StatCard icon={<Clock size={20} />} label="Pending" value={pendingCount} color="bg-[#4e3a2d]" />
+                <StatCard icon={<Timer size={20} />} label="Pending" value={pendingCount} color="bg-[#4e3a2d]" />
                 <StatCard icon={<Users size={20} />} label="Messages" value={contacts.length} color="bg-[#2d3e4a]" />
               </div>
               <div className="bg-card rounded-xl border border-border p-5">
