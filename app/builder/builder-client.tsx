@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, Suspense, useCallback } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,18 @@ import * as THREE from "three";
 import { cn } from "@/lib/utils";
 
 function hasWebGL(): boolean {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return false;
+  }
+
   try {
     const canvas = document.createElement("canvas");
-    return !!(window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")));
+
+    return Boolean(
+      window.WebGLRenderingContext &&
+        (canvas.getContext("webgl") ||
+          canvas.getContext("experimental-webgl"))
+    );
   } catch {
     return false;
   }
@@ -243,6 +252,13 @@ export default function SuitBuilder() {
   const [customerName, setCustomerName] = useState("");
   const [viewId, setViewId]     = useState("auto");
   const [useCustom, setUseCustom] = useState(false);
+  const [webgl, setWebgl] = useState(false);
+  const [webglChecked, setWebglChecked] = useState(false);
+
+  useEffect(() => {
+    setWebgl(hasWebGL());
+    setWebglChecked(true);
+  }, []);
 
   const activeFabricColor = useCustom ? customHex : (colorOverride ?? selectedColor.hex);
 
@@ -296,8 +312,6 @@ export default function SuitBuilder() {
     mutation.mutate();
   };
 
-  const webgl = hasWebGL();
-
   return (
     <div className="w-full">
       <section className="relative h-48 bg-primary flex items-center justify-center">
@@ -326,7 +340,13 @@ export default function SuitBuilder() {
             </div>
 
             <div className="aspect-[3/4] bg-gradient-to-b from-secondary/60 via-background to-muted rounded-2xl overflow-hidden border border-border shadow-2xl">
-              {webgl ? (
+              {!webglChecked ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <p className="text-sm text-muted-foreground">
+                    Loading 3D preview...
+                  </p>
+                </div>
+              ) : webgl ? (
                 <Canvas camera={{ position: [0, 1.2, 5.8], fov: 40 }}>
                   <Suspense fallback={null}>
                     <ambientLight intensity={0.6} />

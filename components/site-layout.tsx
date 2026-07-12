@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X, MapPin, Phone, Mail } from "lucide-react";
+import { Menu, X, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function IconInstagram({ size = 20 }: { size?: number }) {
@@ -171,18 +171,56 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/services" className="hover:text-accent transition-colors">Services</Link></li>
               <li><Link href="/builder" className="hover:text-accent transition-colors">Suit Builder</Link></li>
               <li><Link href="/booking" className="hover:text-accent transition-colors">Book a Fitting</Link></li>
+              <li><Link href="/legal" className="hover:text-accent transition-colors">Legal Info</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-display text-xl mb-6 text-accent">Visit Our Store</h4>
-            <ul className="space-y-3 text-primary-foreground/80">
-              <li>Shop 3/196 Marion Road</li>
-              <li>West Richmond, Adelaide SA 5033</li>
-              <li className="pt-2"><a href="tel:0414053773" className="hover:text-accent transition-colors">0414 053 773</a></li>
-              <li><a href="mailto:info@tailorobe.com.au" className="hover:text-accent transition-colors">info@tailorobe.com.au</a></li>
-              <li className="pt-2">Mon – Fri: 12:00 PM – 7:00 PM</li>
-              <li>Weekends: 10:00 AM – 5:00 PM</li>
-            </ul>
+            <ul className="space-y-4 text-primary-foreground/80">
+  <li className="flex items-start gap-3">
+    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+      <MapPin size={17} />
+    </span>
+    <span className="leading-relaxed">
+      Shop 3/196 Marion Road<br />
+      West Richmond, Adelaide SA 5033
+    </span>
+  </li>
+
+  <li className="flex items-center gap-3">
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+      <Phone size={17} />
+    </span>
+    <a
+      href="tel:0414053773"
+      className="hover:text-accent transition-colors"
+    >
+      0414 053 773
+    </a>
+  </li>
+
+  <li className="flex items-center gap-3">
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+      <Mail size={17} />
+    </span>
+    <a
+      href="mailto:info@tailorobe.com.au"
+      className="hover:text-accent transition-colors break-all"
+    >
+      info@tailorobe.com.au
+    </a>
+  </li>
+
+  <li className="flex items-start gap-3 pt-2">
+    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+      <Clock size={17} />
+    </span>
+    <span className="leading-relaxed">
+      Weekdays:12:00PM – 7:00PM<br />
+      Weekends:10:00AM – 5:00PM
+    </span>
+  </li>
+</ul>
           </div>
         </div>
 
