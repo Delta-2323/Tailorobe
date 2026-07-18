@@ -50,8 +50,8 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/about", label: "About Us" },
     { href: "/services", label: "Services" },
+    { href: "/products", label: "Shop" },
     { href: "/builder", label: "Suit Builder" },
     { href: "/gallery", label: "Gallery" },
     { href: "/booking", label: "Book Fitting" },
