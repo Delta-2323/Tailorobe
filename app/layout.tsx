@@ -86,7 +86,7 @@ export default function RootLayout({
               areaServed: "Adelaide",
               address: {
                 "@type": "PostalAddress",
-                streetAddress": "Shop 3/196 Marion Road",
+                streetAddress: "Shop 3/196 Marion Road",
                 addressLocality: "West Richmond",
                 addressRegion: "SA",
                 postalCode: "5033",
