@@ -6,6 +6,7 @@ import "./globals.css";
 
 import { Providers } from "./providers";
 import { SiteLayout } from "@/components/site-layout";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: "Tailorobe | Bespoke Tailors Adelaide",
@@ -83,6 +84,7 @@ export default function RootLayout({
 
   <Analytics />
   <SpeedInsights />
+  <GoogleAnalytics gaId="G-CFZLFYJK2S" />
 </body>
     </html>
   );
