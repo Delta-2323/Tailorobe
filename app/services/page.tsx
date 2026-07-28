@@ -21,14 +21,14 @@ const services = [
     details: ["Collar, cuff & placket options", "Monogramming available", "Choice of lining fabrics", "2 week turnaround"],
     image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?q=80&w=1200&auto=format&fit=crop",
   },
-  {
-    id: "indian-traditional",
-    title: "Indian Traditional Attire",
-    badge: "Packages Available",
-    description: "Celebrate culture and elegance with our exquisite range of Indian traditional garments. From resplendent sherwanis for grand occasions to refined kurta pajamas and contemporary Indo-Western fusion pieces, each garment is crafted with the finest embroideries and fabrics.",
-    details: ["Sherwani & Achkan", "Kurta Pajama & Pathani sets", "Indo-Western fusion designs", "Custom embroidery & zari work", "Premium silk, brocade & georgette fabrics"],
-    image: "https://i.pinimg.com/236x/7b/1c/da/7b1cdaba40acdcd7c8246d3625a16fc2.jpg",
-  },
+{
+  id: "indian-traditional",
+  title: "Indian Traditional Attire",
+  badge: "Packages Available",
+  description: "Celebrate culture and elegance with our exquisite range of Indian traditional garments. From resplendent sherwanis for grand occasions to refined kurta pajamas and contemporary Indo-Western fusion pieces, each garment is crafted with the finest embroideries and fabrics.",
+  details: ["Sherwani & Achkan", "Kurta Pajama & Pathani sets", "Indo-Western fusion designs", "Custom embroidery & zari work", "Premium silk, brocade & georgette fabrics"],
+  image: "/services/indian-traditional.jpg",
+},
   {
     id: "handcrafted-footwear",
     title: "Handcrafted Footwear",

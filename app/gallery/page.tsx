@@ -6,6 +6,17 @@ import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const CUSTOMER_IMAGES = [
+  // ── New customers (added latest) ─────────────────────────────────────────
+  "gallery-186.jpeg",
+  "gallery-187.jpeg",
+  "gallery-188.jpeg",
+  "gallery-189.jpeg",
+  "gallery-190.jpeg",
+  "gallery-191.jpeg",
+  "gallery-192.jpeg",
+  "gallery-193.jpeg",
+  "gallery-194.jpeg",
+  // ── Existing customers ───────────────────────────────────────────────────
   "gallery-09.jpg",
   "gallery-146.jpeg",
   "gallery-01.jpg",
@@ -89,10 +100,31 @@ const CUSTOMER_IMAGES = [
   "gallery-148.jpeg",
   "gallery-156.jpeg",
   "gallery-159.jpeg",
-  "gallery-162.jpeg"
+  "gallery-162.jpeg",
 ];
 
 const DESIGN_IMAGES: string[] = [
+  // ── New designs (added latest) ───────────────────────────────────────────
+  "gallery-167.jpeg",
+  "gallery-168.jpeg",
+  "gallery-169.jpeg",
+  "gallery-170.jpeg",
+  "gallery-171.jpeg",
+  "gallery-172.jpeg",
+  "gallery-173.jpeg",
+  "gallery-174.jpeg",
+  "gallery-175.jpeg",
+  // "gallery-176.jpeg",
+  // "gallery-177.jpeg",
+  "gallery-178.jpeg",
+  "gallery-179.jpeg",
+  "gallery-180.jpeg",
+  "gallery-181.jpeg",
+  "gallery-182.jpeg",
+  "gallery-183.jpeg",
+  // "gallery-184.jpeg",
+  "gallery-185.jpeg",
+  // ── Existing designs ─────────────────────────────────────────────────────
   "gallery-109.jpeg",
   "gallery-68.jpeg",
   "gallery-132.jpeg",
@@ -116,17 +148,17 @@ const DESIGN_IMAGES: string[] = [
   "gallery-113.jpeg",
   "gallery-86.jpeg",
   "gallery-134.jpeg",
-  "gallery-99.jpeg",
+  // "gallery-99.jpeg",
   "gallery-124.jpeg",
   "gallery-77.jpeg",
   "gallery-118.jpeg",
   "gallery-90.jpeg",
   "gallery-143.jpeg",
-  "gallery-69.jpeg",
+  // "gallery-69.jpeg",
   "gallery-130.jpeg",
   "gallery-103.jpeg",
   "gallery-82.jpeg",
-  "gallery-166.jpeg",
+  // "gallery-166.jpeg",
   "gallery-120.jpeg",
   "gallery-95.jpeg",
   "gallery-138.jpeg",
@@ -154,7 +186,7 @@ const DESIGN_IMAGES: string[] = [
   "gallery-76.jpeg",
   "gallery-139.jpeg",
   "gallery-100.jpeg",
-  "gallery-125.jpeg",
+  // "gallery-125.jpeg",
   "gallery-89.jpeg",
   "gallery-135.jpeg",
   "gallery-102.jpeg",
@@ -171,20 +203,97 @@ const DESIGN_IMAGES: string[] = [
   "gallery-119.jpeg",
   "gallery-106.jpeg",
   "gallery-108.jpeg",
-  "gallery-107.jpeg"
+  "gallery-107.jpeg",
 ];
 
-const customerPhotos = CUSTOMER_IMAGES.map((filename) => ({ src: `/gallery/${filename}`, alt: filename }));
-const designPhotos = DESIGN_IMAGES.map((filename) => ({ src: `/gallery/${filename}`, alt: filename }));
+// Footwear images — served from /gallery/SAFW*.jpg
+// Copy all SAFW*.jpg files from footwear-images-v2.zip into your /public/gallery/ folder
+const FOOTWEAR_IMAGES: string[] = [
+  "SAFW1.jpg",
+  "SAFW2.jpg",
+  "SAFW3.jpg",
+  "SAFW4.jpg",
+  "SAFW5.jpg",
+  "SAFW6.jpg",
+  "SAFW7.jpg",
+  "SAFW8.jpg",
+  "SAFW9.jpg",
+  "SAFW10.jpg",
+  "SAFW11.jpg",
+  "SAFW12.jpg",
+  "SAFW13.jpg",
+  "SAFW14.jpg",
+  "SAFW15.jpg",
+  "SAFW16.jpg",
+  "SAFW17.jpg",
+  "SAFW18.jpg",
+  "SAFW19.jpg",
+  "SAFW20.jpg",
+  "SAFW21.jpg",
+  "SAFW22.jpg",
+  "SAFW23.jpg",
+  "SAFW24.jpg",
+  "SAFW25.jpg",
+  "SAFW26.jpg",
+  "SAFW27.jpg",
+  "SAFW28.jpg",
+  "SAFW29.jpg",
+  "SAFW30.jpg",
+  "SAFW31.jpg",
+  "SAFW32.jpg",
+  "SAFW33.jpg",
+  "SAFW34.jpg",
+  "SAFW35.jpg",
+  "SAFW36.jpg",
+  "SAFW37.jpg",
+  "SAFW38.jpg",
+  "SAFW39.jpg",
+  "SAFW40.jpg",
+  "SAFW41.jpg",
+  "SAFW42.jpg",
+  "SAFW43.jpg",
+  "SAFW44.jpg",
+  "SAFW45.jpg",
+  "SAFW46.jpg",
+  "SAFW47.jpg",
+  "SAFW48.jpg",
+  "SAFW49.jpg",
+  "SAFW50.jpg",
+  "SAFW51.jpg",
+  "SAFW52.jpg",
+  "SAFW53.jpg",
+  "SAFW54.jpg",
+  "SAFW55.jpg",
+  "SAFW56.jpg",
+  "SAFW57.jpg",
+  "SAFW58.jpg",
+  "SAFW59.jpg",
+  "SAFW60.jpg",
+];
+
+const customerPhotos  = CUSTOMER_IMAGES.map((f) => ({ src: `/gallery/${f}`, alt: f }));
+const designPhotos    = DESIGN_IMAGES.map((f)   => ({ src: `/gallery/${f}`, alt: f }));
+const footwearPhotos  = FOOTWEAR_IMAGES.map((f) => ({ src: `/gallery/${f}`, alt: f }));
+
+type ActiveTab = "customers" | "designs" | "footwear";
+
+const TABS: { key: ActiveTab; label: string }[] = [
+  { key: "customers", label: "Customers" },
+  { key: "designs",   label: "Design" },
+  { key: "footwear",  label: "Footwear" },
+];
 
 export default function Gallery() {
-  const [lightbox, setLightbox] = useState<number | null>(null);
-  const [activeFolder, setActiveFolder] = useState<"customers" | "designs">("customers");
-  const [loaded, setLoaded] = useState<Record<number, boolean>>({});
+  const [lightbox, setLightbox]       = useState<number | null>(null);
+  const [activeTab, setActiveTab]     = useState<ActiveTab>("customers");
+  const [loaded, setLoaded]           = useState<Record<number, boolean>>({});
 
-  const photos = activeFolder === "customers" ? customerPhotos : designPhotos;
+  const photos =
+    activeTab === "customers" ? customerPhotos :
+    activeTab === "designs"   ? designPhotos   :
+                                footwearPhotos;
 
-  const openLightbox = (idx: number) => setLightbox(idx);
+  const openLightbox  = (idx: number) => setLightbox(idx);
   const closeLightbox = () => setLightbox(null);
 
   const prev = useCallback(() => {
@@ -200,9 +309,9 @@ export default function Gallery() {
   useEffect(() => {
     if (lightbox === null) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeLightbox();
-      if (e.key === "ArrowLeft") prev();
-      if (e.key === "ArrowRight") next();
+      if (e.key === "Escape")      closeLightbox();
+      if (e.key === "ArrowLeft")   prev();
+      if (e.key === "ArrowRight")  next();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -213,10 +322,19 @@ export default function Gallery() {
     return () => { document.body.style.overflow = ""; };
   }, [lightbox]);
 
+  // Reset animation state whenever the active tab changes
+  useEffect(() => {
+    setLoaded({});
+  }, [activeTab]);
+
   return (
     <div className="w-full">
+      {/* ── Hero ── */}
       <section className="relative h-56 bg-primary overflow-hidden flex items-center justify-center">
-        <div className="absolute inset-0 opacity-20 bg-cover bg-center" style={{ backgroundImage: "url(/gallery/gallery-01.jpg)" }} />
+        <div
+          className="absolute inset-0 opacity-20 bg-cover bg-center"
+          style={{ backgroundImage: "url(/gallery/gallery-01.jpg)" }}
+        />
         <div className="relative z-10 text-center px-4">
           <p className="text-accent/90 text-sm font-semibold uppercase tracking-[0.25em] mb-3">Our Work</p>
           <h1 className="font-display text-3xl sm:text-5xl text-white font-bold">Gallery</h1>
@@ -224,29 +342,31 @@ export default function Gallery() {
         </div>
       </section>
 
-      {/* Folder Buttons */}
+      {/* ── Tab buttons ── */}
       <section className="flex justify-center gap-4 py-8 flex-wrap">
-        <button
-          onClick={() => setActiveFolder("customers")}
-          className={cn("px-6 py-3 rounded-xl text-sm font-semibold border transition-all", activeFolder === "customers" ? "bg-primary text-white border-primary" : "bg-card border-border hover:bg-muted")}
-        >
-          Customers
-        </button>
-        <button
-          onClick={() => setActiveFolder("designs")}
-          className={cn("px-6 py-3 rounded-xl text-sm font-semibold border transition-all", activeFolder === "designs" ? "bg-primary text-white border-primary" : "bg-card border-border hover:bg-muted")}
-        >
-          Designs
-        </button>
+        {TABS.map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setActiveTab(key)}
+            className={cn(
+              "px-6 py-3 rounded-xl text-sm font-semibold border transition-all",
+              activeTab === key
+                ? "bg-primary text-white border-primary"
+                : "bg-card border-border hover:bg-muted",
+            )}
+          >
+            {label}
+          </button>
+        ))}
       </section>
 
       <section className="bg-card border-b border-border py-6">
         <p className="text-center text-muted-foreground text-sm max-w-2xl mx-auto px-4">
-          Every piece in our gallery was crafted by hand at our store in West Richmond, Adelaide. From heritage bespoke suits to vibrant Indian traditional attire and each garment tells a unique story.
+          Every piece in our gallery was crafted by hand at our store in West Richmond, Adelaide. From heritage bespoke suits to vibrant Indian traditional attire — each garment tells a unique story.
         </p>
       </section>
 
-      {/* Gallery Grid */}
+      {/* ── Gallery Grid ── */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
         {photos.length === 0 ? (
           <div className="text-center py-20">
@@ -260,14 +380,14 @@ export default function Gallery() {
                 className="break-inside-avoid mb-4 group relative overflow-hidden rounded-2xl shadow-md cursor-pointer border border-border/30 bg-muted"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: loaded[idx] ? 1 : 0, y: loaded[idx] ? 0 : 20 }}
-                transition={{ duration: 0.4, delay: idx * 0.04 }}
+                transition={{ duration: 0.4, delay: Math.min(idx * 0.04, 1.2) }}
                 onClick={() => openLightbox(idx)}
               >
                 <img
                   src={photo.src}
                   alt={photo.alt}
                   className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
-                  onLoad={() => setLoaded((p) => ({ ...p, [idx]: true }))}
+                  onLoad={()  => setLoaded((p) => ({ ...p, [idx]: true }))}
                   onError={() => setLoaded((p) => ({ ...p, [idx]: true }))}
                   loading="lazy"
                 />
@@ -284,37 +404,70 @@ export default function Gallery() {
           </div>
         )}
 
+        {/* ── CTA ── */}
         <div className="mt-14 text-center">
           <div className="inline-block bg-card border border-border rounded-2xl px-10 py-8 shadow-sm max-w-lg">
             <p className="font-display text-2xl text-primary mb-2">Like what you see?</p>
-            <p className="text-muted-foreground text-sm mb-5">Every garment is crafted to your exact measurements. Come in for a consultation at our West Richmond store.</p>
-            <a href="/booking" className="inline-block bg-primary text-white px-7 py-3 rounded-lg text-sm font-semibold uppercase tracking-widest hover:bg-primary/90 transition-colors">
+            <p className="text-muted-foreground text-sm mb-5">
+              Every garment is crafted to your exact measurements. Come in for a consultation at our West Richmond store.
+            </p>
+            <a
+              href="/booking"
+              className="inline-block bg-primary text-white px-7 py-3 rounded-lg text-sm font-semibold uppercase tracking-widest hover:bg-primary/90 transition-colors"
+            >
               Book a Fitting
             </a>
           </div>
         </div>
       </section>
 
-      {/* Lightbox */}
+      {/* ── Lightbox ── */}
       <AnimatePresence>
         {lightbox !== null && photos[lightbox] && (
-          <motion.div className="fixed inset-0 z-50 flex items-center justify-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
             <div className="absolute inset-0 bg-black/92 backdrop-blur-sm" onClick={closeLightbox} />
             <div className="relative z-10 flex items-center gap-4 w-full max-w-5xl px-4">
-              <button onClick={(e) => { e.stopPropagation(); prev(); }} className="flex-shrink-0 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors border border-white/20">
+              <button
+                onClick={(e) => { e.stopPropagation(); prev(); }}
+                className="flex-shrink-0 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors border border-white/20"
+                aria-label="Previous image"
+              >
                 <ChevronLeft size={22} />
               </button>
-              <motion.div key={lightbox} className="flex-1 flex flex-col items-center" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+              <motion.div
+                key={lightbox}
+                className="flex-1 flex flex-col items-center"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+              >
                 <div className="relative max-h-[80vh] flex items-center justify-center">
-                  <img src={photos[lightbox].src} alt={photos[lightbox].alt} className="max-h-[82vh] max-w-full object-contain rounded-xl shadow-2xl" />
+                  <img
+                    src={photos[lightbox].src}
+                    alt={photos[lightbox].alt}
+                    className="max-h-[82vh] max-w-full object-contain rounded-xl shadow-2xl"
+                  />
                 </div>
                 <p className="text-white/40 text-xs mt-3">{lightbox + 1} of {photos.length}</p>
               </motion.div>
-              <button onClick={(e) => { e.stopPropagation(); next(); }} className="flex-shrink-0 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors border border-white/20">
+              <button
+                onClick={(e) => { e.stopPropagation(); next(); }}
+                className="flex-shrink-0 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors border border-white/20"
+                aria-label="Next image"
+              >
                 <ChevronRight size={22} />
               </button>
             </div>
-            <button onClick={closeLightbox} className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors border border-white/20">
+            <button
+              onClick={closeLightbox}
+              className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors border border-white/20"
+              aria-label="Close lightbox"
+            >
               <X size={18} />
             </button>
           </motion.div>
