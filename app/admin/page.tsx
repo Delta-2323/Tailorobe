@@ -4,10 +4,18 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Calendar, MessageSquare, LogOut, BarChart3, CheckCircle, Timer, Images } from "lucide-react";
+import { Users, Calendar, MessageSquare, LogOut, BarChart3, CheckCircle, Timer, Images, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { fetchAppointments, fetchContacts, updateAppointmentStatus, type Appointment, type ContactMessage } from "@/lib/db";
+import {
+  fetchAppointments,
+  fetchContacts,
+  fetchOrders,
+  updateAppointmentStatus,
+  type Appointment,
+  type ContactMessage,
+  type Order,
+} from "@/lib/db";
 import { Timer as ThreeTimer } from "three";
 
 const ADMIN_PIN = "1234";
@@ -49,19 +57,39 @@ export default function Admin() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   const loadData = async () => {
-    setDataLoading(true);
-    try {
-      const [appts, msgs] = await Promise.all([fetchAppointments(), fetchContacts()]);
-      setAppointments(appts);
-      setContacts(msgs);
-    } catch {
-      toast({ title: "Error", description: "Failed to load data from database.", variant: "destructive" });
-    } finally {
-      setDataLoading(false);
-    }
-  };
+  setDataLoading(true);
+
+  try {
+    const [appts, msgs, orderData] = await Promise.all([
+      fetchAppointments(),
+      fetchContacts(),
+      fetchOrders(),
+    ]);
+
+    console.log("Appointments:", appts);
+    console.log("Messages:", msgs);
+    console.log("Orders:", orderData);
+
+    setAppointments(appts);
+    setContacts(msgs);
+    setOrders(orderData);
+
+  } catch (error) {
+    console.error("Admin data loading error:", error);
+
+    toast({
+      title: "Error",
+      description: "Failed to load data from database.",
+      variant: "destructive",
+    });
+
+  } finally {
+    setDataLoading(false);
+  }
+};
 
   useEffect(() => {
     if (authenticated) loadData();
@@ -121,11 +149,12 @@ export default function Admin() {
   }
 
   const tabs = [
-    { id: "dashboard",    label: "Dashboard",    icon: <BarChart3 size={18} /> },
-    { id: "appointments", label: "Appointments", icon: <Calendar size={18} /> },
-    { id: "contact",      label: "Messages",     icon: <MessageSquare size={18} /> },
-    { id: "gallery",      label: "Gallery",      icon: <Images size={18} /> },
-  ];
+  { id: "dashboard",    label: "Dashboard",    icon: <BarChart3 size={18} /> },
+  { id: "appointments", label: "Appointments", icon: <Calendar size={18} /> },
+  { id: "orders",       label: "Orders",       icon: <ShoppingBag size={18} /> },
+  { id: "contact",      label: "Messages",     icon: <MessageSquare size={18} /> },
+  { id: "gallery",      label: "Gallery",      icon: <Images size={18} /> },
+];
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -166,10 +195,11 @@ export default function Admin() {
           {activeTab === "dashboard" && (
             <div>
               <h2 className="font-display text-2xl text-primary mb-6">Overview</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <StatCard icon={<Calendar size={20} />} label="Total Appointments" value={appointments.length} color="bg-primary" />
                 <StatCard icon={<Timer size={20} />} label="Pending" value={pendingCount} color="bg-[#4e3a2d]" />
                 <StatCard icon={<Users size={20} />} label="Messages" value={contacts.length} color="bg-[#2d3e4a]" />
+                <StatCard icon={<ShoppingBag size={20} />} label="Total Orders" value={orders.length} color="bg-[#2d4a3e]" />
               </div>
               <div className="bg-card rounded-xl border border-border p-5">
                 <h3 className="font-semibold mb-4 text-primary">Upcoming Appointments</h3>
@@ -234,6 +264,114 @@ export default function Admin() {
               )}
             </div>
           )}
+        {activeTab === "orders" && (
+  <div>
+    <h2 className="font-display text-2xl text-primary mb-6">
+      Online Orders
+    </h2>
+
+    {orders.length === 0 ? (
+      <div className="text-center py-24 text-muted-foreground">
+        <ShoppingBag size={48} className="mx-auto mb-4 opacity-30" />
+        <p>No online orders found.</p>
+      </div>
+    ) : (
+      <div className="space-y-4">
+
+        {orders.map((order) => (
+          <div
+            key={order.id}
+            className="bg-card border border-border rounded-xl p-5"
+          >
+
+            <h3 className="font-semibold text-lg mb-4">
+              {order.customer_name}
+            </h3>
+
+            <div className="grid md:grid-cols-2 gap-3 text-sm">
+
+              <p>
+                <span className="text-muted-foreground">
+                  Product:
+                </span>{" "}
+                {order.product_type}
+              </p>
+
+              <p>
+                <span className="text-muted-foreground">
+                  Fabric:
+                </span>{" "}
+                {order.fabric_name}
+              </p>
+
+              <p>
+                <span className="text-muted-foreground">
+                  Colour:
+                </span>{" "}
+                {order.color}
+              </p>
+
+              <p>
+                <span className="text-muted-foreground">
+                  Lapel:
+                </span>{" "}
+                {order.lapel_style}
+              </p>
+
+              <p>
+                <span className="text-muted-foreground">
+                  Buttons:
+                </span>{" "}
+                {order.button_style}
+              </p>
+
+              <p>
+                <span className="text-muted-foreground">
+                  Pocket:
+                </span>{" "}
+                {order.pocket_style}
+              </p>
+
+              <p>
+                <span className="text-muted-foreground">
+                  Lining:
+                </span>{" "}
+                {order.lining_color}
+              </p>
+
+              {order.monogram && (
+                <p>
+                  <span className="text-muted-foreground">
+                    Monogram:
+                  </span>{" "}
+                  {order.monogram}
+                </p>
+              )}
+
+            </div>
+
+            {order.design_notes && (
+              <div className="mt-4 bg-muted rounded-lg p-3">
+                <span className="font-medium">
+                  Notes:
+                </span>{" "}
+                {order.design_notes}
+              </div>
+            )}
+
+            <p className="text-xs text-muted-foreground mt-4">
+              {order.created_at
+                ? new Date(order.created_at).toLocaleString()
+                : ""}
+            </p>
+
+          </div>
+        ))}
+
+      </div>
+    )}
+  </div>
+)}
 
           {activeTab === "contact" && (
             <div>

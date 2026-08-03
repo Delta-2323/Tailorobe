@@ -94,3 +94,17 @@ export async function insertOrder(data: Omit<Order, "id" | "created_at">) {
   if (error) throw error;
   return result;
 }
+
+export async function fetchOrders(): Promise<Order[]> {
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Fetch orders error:", error);
+    throw error;
+  }
+
+  return data || [];
+}

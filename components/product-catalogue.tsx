@@ -22,11 +22,16 @@ const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const ZOOM_STEP = 0.25;
 
-function getStartingPrice(category: Product["category"]) {
-  switch (category) {
-    case "Footwear":   return 200;
-    case "Waistcoats": return 150;
-    default:           return 699;
+function getStartingPrice(product: Product) {
+  switch (product.category) {
+    case "Footwear":
+      return 150;
+
+    case "Waistcoats":
+      return 150;
+
+    default:
+      return 450;
   }
 }
 
@@ -45,7 +50,7 @@ function ProductCard({
 }) {
   const router = useRouter();
   const [imageFailed, setImageFailed] = useState(false);
-  const startingPrice = getStartingPrice(product.category);
+  const startingPrice = getStartingPrice(product);
   const href = `/products/${product.id}`;
   const bookingHref = `/booking?product=${encodeURIComponent(product.title)}&code=${encodeURIComponent(product.id)}`;
 
@@ -82,14 +87,23 @@ function ProductCard({
           </div>
         )}
 
-        {/* Category badge — top left, pointer-events-none so zoom overlay handles clicks */}
-        <div className="pointer-events-none absolute left-4 top-4 z-20">
-          <span className="rounded-full bg-primary/95 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white shadow-sm">
-            {product.category}
-          </span>
-        </div>
+        {/* Category badge */}
+        {/* Category + Popular badge */}
+<div className="pointer-events-none absolute left-4 top-4 z-20 flex flex-col gap-2">
 
-        {/* Heart button — top right, above zoom overlay */}
+  {product.popular && (
+    <span className="rounded-full bg-black px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white shadow-sm">
+      Popular
+    </span>
+  )}
+
+  <span className="rounded-full bg-primary/95 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-white shadow-sm">
+    {product.category}
+  </span>
+
+</div>
+
+        {/* Heart button */}
         <div className="absolute right-3 top-3 z-20">
           <HeartButton
             productId={product.id}
@@ -98,7 +112,7 @@ function ProductCard({
           />
         </div>
 
-        {/* Transparent zoom overlay — z-10 so heart (z-20) stays clickable */}
+        {/* Zoom overlay */}
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); onZoom(product); }}
@@ -132,20 +146,38 @@ function ProductCard({
         </p>
 
         <div className="mt-auto pt-6">
-          <div className="mb-5 rounded-xl border border-primary/10 bg-primary/[0.04] px-4 py-3">
-            <p className="text-sm font-semibold text-primary">Custom quotation</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">
-              Starting at ${startingPrice.toFixed(2)}
+          {/* Pricing summary */}
+          <div className="mb-4 rounded-xl border border-primary/10 bg-primary/[0.04] px-4 py-3">
+            <p className="text-sm font-semibold text-primary">
+              Ready-Made from ${startingPrice.toFixed(0)}
             </p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">
-              Final details depend on your fabric, fit, measurements and personal design choices.
+                Select size &amp; fit on the product page
             </p>
+            {product.threePieceAvailable && (
+  <p className="mt-2 text-xs font-semibold text-accent">
+    Three-piece suit option +$150
+    <span className="block mt-1 font-normal text-muted-foreground">
+      Includes tailored vest
+    </span>
+  </p>
+)}
           </div>
 
+          {/* View Details — primary CTA */}
+          <Link
+            href={href}
+            onClick={(e) => e.stopPropagation()}
+            className="mb-2 flex w-full items-center justify-center rounded-full bg-primary px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          >
+            View Details
+          </Link>
+
+          {/* Book a Fitting — secondary */}
           <Link
             href={bookingHref}
             onClick={(e) => e.stopPropagation()}
-            className="flex w-full items-center justify-center rounded-full bg-primary px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="flex w-full items-center justify-center rounded-full border border-primary px-5 py-3 text-center text-xs font-bold uppercase tracking-[0.18em] text-primary transition hover:bg-primary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             Book a Fitting
           </Link>
@@ -322,7 +354,18 @@ export default function ProductCatalogue() {
         p.description.toLowerCase().includes(search);
       return catMatch && srcMatch;
     });
-    return sort === "name" ? [...result].sort((a, b) => a.title.localeCompare(b.title)) : result;
+    if (sort === "name") {
+  return [...result].sort((a, b) =>
+    a.title.localeCompare(b.title)
+  );
+}
+
+return [...result].sort((a, b) => {
+  if (a.pinned && !b.pinned) return -1;
+  if (!a.pinned && b.pinned) return 1;
+
+  return 0;
+});
   }, [activeCategory, query, sort]);
 
   return (

@@ -1,18 +1,22 @@
 "use client";
 
+import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
-import { useState } from "react";
+import { CartProvider } from "@/hooks/useCart";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export function Providers({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000,
-            retry: 1,
+            retry: false,
           },
         },
       })
@@ -21,7 +25,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>

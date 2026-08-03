@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X, MapPin, Phone, Mail, Clock } from "lucide-react";
+import { Menu, X, MapPin, Phone, Mail, Clock, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/hooks/useCart";
 
 function IconInstagram({ size = 20 }: { size?: number }) {
   return (
@@ -36,8 +37,11 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { totalItems } = useCart();
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -107,15 +111,44 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
                   )} />
                 </Link>
               ))}
+
+              {/* Cart icon — desktop */}
+              <Link
+                href="/cart"
+                className="relative ml-2 w-10 h-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors text-foreground hover:text-accent"
+                aria-label="Cart"
+              >
+                <ShoppingCart size={20} />
+                {mounted && totalItems > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-accent text-primary text-[10px] font-bold flex items-center justify-center leading-none">
+                    {totalItems > 9 ? "9+" : totalItems}
+                  </span>
+                )}
+              </Link>
             </nav>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 text-foreground"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile: cart icon + menu button */}
+            <div className="md:hidden flex items-center gap-2">
+              <Link
+                href="/cart"
+                className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+                aria-label="Cart"
+              >
+                <ShoppingCart size={20} />
+                {mounted && totalItems > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-accent text-primary text-[10px] font-bold flex items-center justify-center leading-none">
+                    {totalItems > 9 ? "9+" : totalItems}
+                  </span>
+                )}
+              </Link>
+              <button
+                className="p-2 text-foreground"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -134,6 +167,18 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/cart"
+              className="flex items-center gap-2 text-lg font-display py-2"
+            >
+              <ShoppingCart size={18} />
+              Cart
+              {mounted && totalItems > 0 && (
+                <span className="w-5 h-5 rounded-full bg-accent text-primary text-[10px] font-bold flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
           </div>
         )}
       </header>
@@ -150,7 +195,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
               <span className="font-display text-3xl font-bold tracking-wider text-white">TAILOROBE</span>
             </Link>
             <p className="text-primary-foreground/80 max-w-sm mb-6 leading-relaxed">
-              Adelaide's premier destination for bespoke tailoring. Crafting elegant, made-to-measure garments that reflect your personal style and uncompromising standards.
+              Adelaide&apos;s premier destination for bespoke tailoring. Crafting elegant, made-to-measure garments that reflect your personal style and uncompromising standards.
             </p>
             <div className="flex items-center gap-4">
               <a href="https://www.instagram.com/tailorobe" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors">
@@ -177,50 +222,37 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
           <div>
             <h4 className="font-display text-xl mb-6 text-accent">Visit Our Store</h4>
             <ul className="space-y-4 text-primary-foreground/80">
-  <li className="flex items-start gap-3">
-    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
-      <MapPin size={17} />
-    </span>
-    <span className="leading-relaxed">
-      Shop 3/196 Marion Road<br />
-      West Richmond, Adelaide SA 5033
-    </span>
-  </li>
-
-  <li className="flex items-center gap-3">
-    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
-      <Phone size={17} />
-    </span>
-    <a
-      href="tel:0414053773"
-      className="hover:text-accent transition-colors"
-    >
-      0414 053 773
-    </a>
-  </li>
-
-  <li className="flex items-center gap-3">
-    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
-      <Mail size={17} />
-    </span>
-    <a
-      href="mailto:info@tailorobe.com.au"
-      className="hover:text-accent transition-colors break-all"
-    >
-      info@tailorobe.com.au
-    </a>
-  </li>
-
-  <li className="flex items-start gap-3 pt-2">
-    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
-      <Clock size={17} />
-    </span>
-    <span className="leading-relaxed">
-      Weekdays:12:00PM – 7:00PM<br />
-      Weekends:10:00AM – 5:00PM
-    </span>
-  </li>
-</ul>
+              <li className="flex items-start gap-3">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+                  <MapPin size={17} />
+                </span>
+                <span className="leading-relaxed">
+                  Shop 3/196 Marion Road<br />
+                  West Richmond, Adelaide SA 5033
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+                  <Phone size={17} />
+                </span>
+                <a href="tel:0414053773" className="hover:text-accent transition-colors">0414 053 773</a>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+                  <Mail size={17} />
+                </span>
+                <a href="mailto:info@tailorobe.com.au" className="hover:text-accent transition-colors break-all">info@tailorobe.com.au</a>
+              </li>
+              <li className="flex items-start gap-3 pt-2">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+                  <Clock size={17} />
+                </span>
+                <span className="leading-relaxed">
+                  Weekdays: 12:00PM – 7:00PM<br />
+                  Weekends: 10:00AM – 5:00PM
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
 

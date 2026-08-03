@@ -4,9 +4,111 @@ export interface Product {
   description: string;
   image: string;
   category: "Suits" | "Footwear" | "Waistcoats";
+  pinned?: boolean;
+  popular?: boolean;
+  threePieceAvailable?: boolean;
 }
 
 export const PRODUCTS: Product[] = [
+  // ── Popular Essentials — pinned at top of Suits ──────────────────────────
+  // ── Popular Essentials — pinned at top of Suits ──────────────────────────
+
+{
+  id: "POP001",
+  title: "Classic Black Two-Piece Suit",
+  description:
+    "The ultimate timeless essential. A premium black slim-fit suit designed for weddings, business, and formal occasions.",
+  image: "/products/POP001.jpg",
+  category: "Suits",
+  pinned: true,
+  popular: true,
+  threePieceAvailable: true,
+},
+
+{
+  id: "POP002",
+  title: "Midnight Blue Two-Piece Suit",
+  description:
+    "A sophisticated midnight blue suit offering elegance and versatility for weddings, evening events, and formal occasions.",
+  image: "/products/POP002.jpg",
+  category: "Suits",
+  pinned: true,
+  popular: true,
+  threePieceAvailable: true,
+},
+
+{
+  id: "POP003",
+  title: "Beige Two-Piece Suit",
+  description:
+    "A refined beige suit perfect for summer weddings, garden events, and modern formal celebrations.",
+  image: "/products/POP003.jpg",
+  category: "Suits",
+  pinned: true,
+  popular: true,
+  threePieceAvailable: true,
+},
+
+{
+  id: "POP004",
+  title: "Navy Blue Two-Piece Suit",
+  description:
+    "A classic navy blue tailored suit combining timeless style with modern sophistication.",
+  image: "/products/POP004.jpg",
+  category: "Suits",
+  pinned: true,
+  popular: true,
+  threePieceAvailable: true,
+},
+
+{
+  id: "POP005",
+  title: "Burgundy Two-Piece Suit",
+  description:
+    "A bold burgundy suit designed for statement weddings, receptions, and luxury occasions.",
+  image: "/products/POP005.jpg",
+  category: "Suits",
+  pinned: true,
+  popular: true,
+  threePieceAvailable: true,
+},
+
+{
+  id: "POP006",
+  title: "Royal Blue Two-Piece Suit",
+  description:
+    "A vibrant royal blue tailored suit created for confident and stylish formal appearances.",
+  image: "/products/POP006.jpg",
+  category: "Suits",
+  pinned: true,
+  popular: true,
+  threePieceAvailable: true,
+},
+
+{
+  id: "POP007",
+  title: "Bottle Green Two-Piece Suit",
+  description:
+    "A deep bottle green suit offering a modern luxury look for weddings and special occasions.",
+  image: "/products/POP007.jpg",
+  category: "Suits",
+  pinned: true,
+  popular: true,
+  threePieceAvailable: true,
+},
+
+{
+  id: "POP008",
+  title: "Dark Brown Two-Piece Suit",
+  description:
+    "A rich dark brown tailored suit with a refined silhouette for elegant formal wear.",
+  image: "/products/POP008.jpg",
+  category: "Suits",
+  pinned: true,
+  popular: true,
+  threePieceAvailable: true,
+},
+  // ── Full Collection ───────────────────────────────────────────────────────
   {
     id: "SA1112",
     title: "Black Sequins Hand Embroidered Italian Tier Tuxedo Suit",
@@ -117,7 +219,7 @@ export const PRODUCTS: Product[] = [
     title: "Oxford Grey Three Piece Suit with Royal Black Waistcoat",
     description: "An elegant Oxford Grey two-piece suit paired with a contrasting royal black waistcoat. Tailored for a sharp, modern look which are perfect for weddings, formal occasions, and business events.",
     image: "/products/SA0042.jpg",
-    category: "Waistcoats",
+    category: "Suits",
   },
   {
     id: "SA0118",
@@ -257,7 +359,7 @@ export const PRODUCTS: Product[] = [
     title: "Ash Two Piece Suit with Royal Black Waistcoat",
     description: "A sharp, modern classic. Premium fabric with tailored fit. Includes blazer, royal black waistcoat, and trousers, which are perfect for weddings, events, or power moves at work.",
     image: "/products/SA0044.jpg",
-    category: "Waistcoats",
+    category: "Suits",
   },
   {
     id: "SA1113",
@@ -677,7 +779,7 @@ export const PRODUCTS: Product[] = [
     title: "Saphire Two Piece Suit with a Sky-Blue waistcoat",
     description: "An elegant Oxford Grey two-piece suit paired with a contrasting royal black waistcoat. Tailored for a sharp, modern look which are perfect for weddings, formal occasions, and business events.",
     image: "/products/SA0017.jpg",
-    category: "Waistcoats",
+    category: "Suits",
   },
   {
     id: "SAFW10",
