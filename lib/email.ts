@@ -160,46 +160,62 @@ export async function sendBookingEmails(data: any) {
 export async function sendOrderEmails(data: any) {
   const transporter = createTransport();
 
-  const design =
-    `
-Fabric: ${data.fabric}
-Grade: ${data.grade}
-Colour: ${data.colour}
-Cut: ${data.cut}
-Lapel: ${data.lapel}
-Buttons: ${data.buttons}
-Pockets: ${data.pockets}
-Vent: ${data.vent}
-Trouser: ${data.trouser}
-Lining: ${data.lining}
-Monogram: ${data.monogram}
-`.replace(/\n/g, "<br/>");
-
   const adminRows =
-    row("Customer Name", data.name) +
-    row("Email", data.email) +
-    row("Phone", data.phone) +
-    row("Full Suit Design", design);
+    row("Customer Name", data.customerName) +
+    row("Contact Number", data.customerPhone) +
+    row("Product", data.productType) +
+    row("Fabric", data.fabric) +
+    row("Grade", data.grade) +
+    row("Colour", data.colour) +
+    row("Cut", data.cut) +
+    row("Lapel", data.lapel) +
+    row("Buttons", data.buttons) +
+    row("Pockets", data.pockets) +
+    row("Vent", data.vent) +
+    row("Trouser", data.trouser) +
+    row("Lining", data.lining) +
+    row("Monogram", data.monogram || "-") +
+    row("Status", "Pending");
 
   const customerRows =
-    row("Name", data.name) +
-    row("Email", data.email) +
-    row("Phone", data.phone) +
-    row("Your Suit Design", design);
+    row("Customer Name", data.customerName) +
+    row("Contact Number", data.customerPhone) +
+    row("Product", data.productType) +
+    row("Fabric", data.fabric) +
+    row("Grade", data.grade) +
+    row("Colour", data.colour) +
+    row("Cut", data.cut) +
+    row("Lapel", data.lapel) +
+    row("Buttons", data.buttons) +
+    row("Pockets", data.pockets) +
+    row("Vent", data.vent) +
+    row("Trouser", data.trouser) +
+    row("Lining", data.lining) +
+    row("Monogram", data.monogram || "-");
 
   const adminEmail = transporter.sendMail({
     from: `"Tailorobe Orders" <${process.env.GMAIL_USER}>`,
     to: STORE_EMAIL,
-    subject: `New Suit Order — ${data.name}`,
-    html: emailShell("New Suit Order Received 🧥", "ORDER", "#1f2937", adminRows),
+    subject: `New Suit Order — ${data.customerName}`,
+    html: emailShell(
+      "New Suit Order Received 🧥",
+      "ORDER",
+      "#1f2937",
+      adminRows
+    ),
   });
 
-  const customerEmail = data.email
+  const customerEmail = data.customerEmail
     ? transporter.sendMail({
         from: `"Tailorobe" <${process.env.GMAIL_USER}>`,
-        to: data.email,
-        subject: "Your Suit Order Confirmation - Tailorobe",
-        html: emailShell("Order Confirmed ✔", "ORDER", "#16a34a", customerRows),
+        to: data.customerEmail,
+        subject: "Your Suit Design Has Been Saved - Tailorobe",
+        html: emailShell(
+          "Design Saved ✔",
+          "ORDER",
+          "#16a34a",
+          customerRows
+        ),
       })
     : null;
 

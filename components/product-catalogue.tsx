@@ -13,10 +13,16 @@ import { PRODUCTS, type Product } from "@/data/products";
 import { HeartButton } from "@/components/HeartButton";
 import { useLikedProducts } from "@/hooks/useLikedProducts";
 
-type FilterCategory = "All" | Product["category"];
+type FilterCategory = "All" | "Liked" | Product["category"];
 type SortOption = "featured" | "name";
 
-const CATEGORIES: FilterCategory[] = ["All", "Suits", "Footwear", "Waistcoats"];
+const CATEGORIES: FilterCategory[] = [
+  "All",
+  "Liked",
+  "Suits",
+  "Footwear",
+  "Waistcoats",
+];
 
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
@@ -338,16 +344,31 @@ export default function ProductCatalogue() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { isLiked, toggle, likedCount } = useLikedProducts();
 
-  const counts = useMemo(() => {
-    const result: Record<FilterCategory, number> = { All: PRODUCTS.length, Suits: 0, Footwear: 0, Waistcoats: 0 };
-    for (const p of PRODUCTS) result[p.category] += 1;
-    return result;
-  }, []);
+const counts = useMemo(() => {
+  const result: Record<FilterCategory, number> = {
+    All: PRODUCTS.length,
+    Liked: likedCount,
+    Suits: 0,
+    Footwear: 0,
+    Waistcoats: 0,
+  };
+
+  for (const p of PRODUCTS) {
+    result[p.category] += 1;
+  }
+
+  return result;
+}, [likedCount]);
 
   const filteredProducts = useMemo(() => {
     const search = query.trim().toLowerCase();
     const result = PRODUCTS.filter((p) => {
-      const catMatch = activeCategory === "All" || p.category === activeCategory;
+      const catMatch =
+  activeCategory === "All"
+    ? true
+    : activeCategory === "Liked"
+    ? isLiked(p.id)
+    : p.category === activeCategory;
       const srcMatch = search.length === 0 ||
         p.title.toLowerCase().includes(search) ||
         p.id.toLowerCase().includes(search) ||
@@ -366,7 +387,7 @@ return [...result].sort((a, b) => {
 
   return 0;
 });
-  }, [activeCategory, query, sort]);
+  }, [activeCategory, query, sort, isLiked]);
 
   return (
     <main className="w-full">
@@ -399,11 +420,6 @@ return [...result].sort((a, b) => {
                 {category} <span className="opacity-60">({counts[category]})</span>
               </button>
             ))}
-            {likedCount > 0 && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600">
-                ❤️ {likedCount} saved
-              </span>
-            )}
           </div>
 
           <div className="grid gap-3 sm:grid-cols-[1fr_220px]">

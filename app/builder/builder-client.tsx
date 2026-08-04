@@ -250,6 +250,7 @@ export default function SuitBuilder() {
   const [lining, setLining]     = useState(LININGS[0]);
   const [monogram, setMonogram] = useState("");
   const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [viewId, setViewId]     = useState("auto");
   const [useCustom, setUseCustom] = useState(false);
   const [webgl, setWebgl] = useState(false);
@@ -269,6 +270,7 @@ export default function SuitBuilder() {
       const colorLabel = useCustom ? `Custom (${customHex})` : selectedColor.name;
       return insertOrder({
         customer_name: customerName || "Online Design",
+        customer_phone: customerPhone,
         product_type: "Bespoke Suit",
         fabric_name: fabric.name,
         color: activeFabricColor,
@@ -286,15 +288,24 @@ export default function SuitBuilder() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customerName: customerName || "Online Design",
-          productType: "Bespoke Suit",
-          fabricName: fabric.name,
-          color: useCustom ? `Custom (${customHex})` : selectedColor.name,
-          lapelStyle: lapel,
-          buttonStyle: buttons,
-          pocketStyle: pockets,
-          liningColor: lining.name,
-          monogram: monogram || null,
+  customerName: customerName || "Online Design",
+  customerPhone,
+
+  customerEmail: "",
+
+  productType: "Bespoke Suit",
+
+  fabric: fabric.name,
+  grade: fabric.grade,
+  colour: useCustom ? `Custom (${customHex})` : selectedColor.name,
+  cut,
+  lapel,
+  buttons,
+  pockets,
+  vent,
+  trouser,
+  lining: lining.name,
+  monogram: monogram || "",
           designNotes: result?.design_notes,
         }),
       }).catch((err) => console.warn("Order email failed (non-blocking):", err));
@@ -305,10 +316,14 @@ export default function SuitBuilder() {
   });
 
   const handleSave = () => {
-    if (!customerName) {
-      toast({ title: "Almost there", description: "Please enter your name to save your design.", variant: "destructive" });
-      return;
-    }
+   if (!customerName || !customerPhone) {
+    toast({
+        title: "Almost there",
+        description: "Please enter your name and contact number.",
+        variant: "destructive",
+    });
+    return;
+}
     mutation.mutate();
   };
 
@@ -528,20 +543,48 @@ export default function SuitBuilder() {
             </div>
 
             {/* Save Design */}
-            <div className="bg-card rounded-xl border border-border p-6">
-              <h3 className="font-display text-xl text-primary mb-1">Save Your Design</h3>
-              <p className="text-sm text-muted-foreground mb-4">Enter your name and we'll hold your design for your consultation</p>
-              <label className="text-sm font-medium text-foreground block mb-1.5">Your Name *</label>
-              <input
-                value={customerName}
-                onChange={(e) => setCustomerName(e.target.value)}
-                placeholder="John Smith"
-                className="w-full px-4 py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-ring mb-4"
-              />
-              <Button className="w-full uppercase tracking-wider" onClick={handleSave} disabled={mutation.isPending}>
-                {mutation.isPending ? "Saving..." : "Save Design & Request a Fitting"}
-              </Button>
-            </div>
+<div className="bg-card rounded-xl border border-border p-6">
+  <h3 className="font-display text-xl text-primary mb-1">
+    Save Your Design
+  </h3>
+
+  <p className="text-sm text-muted-foreground mb-4">
+    Enter your name and we'll hold your design for your consultation
+  </p>
+
+  {/* Name */}
+  <label className="text-sm font-medium text-foreground block mb-1.5">
+    Your Name *
+  </label>
+  <input
+    value={customerName}
+    onChange={(e) => setCustomerName(e.target.value)}
+    placeholder="John Smith"
+    className="w-full px-4 py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-ring mb-4"
+  />
+
+  {/* Phone */}
+  <label className="text-sm font-medium text-foreground block mb-1.5">
+    Contact Number *
+  </label>
+  <input
+    type="tel"
+    value={customerPhone}
+    onChange={(e) => setCustomerPhone(e.target.value)}
+    placeholder="04********"
+    className="w-full px-4 py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-ring mb-4"
+  />
+
+  <Button
+    className="w-full uppercase tracking-wider"
+    onClick={handleSave}
+    disabled={mutation.isPending}
+  >
+    {mutation.isPending
+      ? "Saving..."
+      : "Save Design & Request a Fitting"}
+  </Button>
+</div>
           </div>
         </div>
       </section>

@@ -118,6 +118,7 @@ export default function Cart() {
   const { toast } = useToast();
 
   const [form, setForm] = useState({ name: "", email: "", phone: "", notes: "" });
+  const [errors, setErrors] = useState({ name: "", email: "", phone: "", notes: ""});
   const [fulfillment, setFulfillment] = useState<FulfillmentMethod>("delivery");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -126,12 +127,67 @@ export default function Cart() {
   const shippingEstimate = fulfillment === "pickup" ? 0 : totalPrice >= 500 ? 0 : 15;
   const grandTotal = totalPrice + shippingEstimate;
 
+  const validateForm = () => {
+  const newErrors = {
+    name: "",
+    email: "",
+    phone: "",
+    notes: ""
+  };
+
+  // Full name
+  if (!form.name.trim()) {
+    newErrors.name = "Full name is required";
+  } else if (form.name.trim().split(" ").length < 2) {
+    newErrors.name = "Please enter your first and last name";
+  }
+
+  // Email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!form.email.trim()) {
+    newErrors.email = "Email address is required";
+  } else if (!emailRegex.test(form.email)) {
+    newErrors.email = "Please enter a valid email address";
+  }
+
+  // Australian mobile
+  const phoneRegex = /^(?:\+61|0)4\d{8}$/;
+  const cleanPhone = form.phone.replace(/\s+/g, "");
+
+  if (!form.phone.trim()) {
+    newErrors.phone = "Phone number is required";
+  } else if (!phoneRegex.test(cleanPhone)) {
+    newErrors.phone =
+      "Enter a valid Australian mobile number (04xx xxx xxx)";
+  }
+
+  // Address required only for delivery
+  if (fulfillment === "delivery") {
+    if (!form.notes.trim()) {
+      newErrors.notes = "Delivery address is required";
+    } else if (form.notes.length < 10) {
+      newErrors.notes = "Please enter your complete address";
+    }
+  }
+
+  setErrors(newErrors);
+
+  return Object.values(newErrors).every(
+    (error) => error === ""
+  );
+};
+
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email) {
-      toast({ title: "Missing Details", description: "Please enter your name and email address.", variant: "destructive" });
-      return;
-    }
+    if (!validateForm()) {
+  toast({
+    title: "Please check your details",
+    description: "Some information is missing or invalid.",
+    variant: "destructive",
+  });
+  return;
+}
     setLoading(true);
     try {
       const res = await fetch("/api/send-cart-order-email", {
@@ -324,15 +380,36 @@ export default function Cart() {
               <form onSubmit={handleCheckout} className="space-y-4">
                 <div>
                   <Label htmlFor="c-name">Full Name *</Label>
-                  <Input id="c-name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="John Smith" className="mt-1.5" />
+                  <Input 
+id="c-name"
+value={form.name}
+onChange={(e) => setForm({ ...form, name: e.target.value })}
+placeholder="John Smith"
+/>
+
+{errors.name && (
+  <p className="text-xs text-red-500 mt-1">
+    {errors.name}
+  </p>
+)}
                 </div>
                 <div>
                   <Label htmlFor="c-email">Email Address *</Label>
                   <Input id="c-email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@example.com" className="mt-1.5" />
+                  {errors.email && (
+  <p className="text-xs text-red-500 mt-1">
+    {errors.email}
+  </p>
+)}
                 </div>
                 <div>
                   <Label htmlFor="c-phone">Phone Number</Label>
                   <Input id="c-phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="0400 000 000" className="mt-1.5" />
+                  {errors.phone && (
+  <p className="text-xs text-red-500 mt-1">
+    {errors.phone}
+  </p>
+)}
                 </div>
                 <div>
                   <Label htmlFor="c-notes">
@@ -345,6 +422,11 @@ export default function Cart() {
                     placeholder={fulfillment === "delivery" ? "Street address, suburb, postcode…" : "Any special instructions…"}
                     className="mt-1.5"
                   />
+                  {errors.notes && (
+  <p className="text-xs text-red-500 mt-1">
+    {errors.notes}
+  </p>
+)}
                 </div>
                 <Button type="submit" size="lg" className="w-full gap-2 mt-2 uppercase tracking-wider" disabled={loading}>
                   {loading ? (
