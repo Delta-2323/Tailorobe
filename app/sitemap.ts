@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     {
       url: "",
-      priority: 1,
+      priority: 1.0,
       changeFrequency: "weekly" as const,
     },
     {
@@ -18,6 +18,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: "/services",
       priority: 0.9,
       changeFrequency: "monthly" as const,
+    },
+    {
+      url: "/products",
+      priority: 0.9,
+      changeFrequency: "weekly" as const,
     },
     {
       url: "/builder",
@@ -36,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: "/contact",
-      priority: 0.7,
+      priority: 0.8,
       changeFrequency: "monthly" as const,
     },
     {
@@ -48,7 +53,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return routes.map((route) => ({
     url: `${baseUrl}${route.url}`,
-    lastModified: new Date(),
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));

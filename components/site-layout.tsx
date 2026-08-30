@@ -3,16 +3,39 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X, MapPin, Phone, Mail, Clock, ShoppingCart } from "lucide-react";
+import {
+  Menu,
+  X,
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  ShoppingCart,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/hooks/useCart";
 
 function IconInstagram({ size = 20 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-      <circle cx="12" cy="12" r="4.5"/>
-      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4.5" />
+      <circle
+        cx="17.5"
+        cy="6.5"
+        r="1"
+        fill="currentColor"
+        stroke="none"
+      />
     </svg>
   );
 }
@@ -20,7 +43,7 @@ function IconInstagram({ size = 20 }: { size?: number }) {
 function IconFacebook({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
     </svg>
   );
 }
@@ -28,7 +51,7 @@ function IconFacebook({ size = 20 }: { size?: number }) {
 function IconTikTok({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
     </svg>
   );
 }
@@ -42,8 +65,11 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
+
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
+
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -73,24 +99,71 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col selection:bg-accent selection:text-primary">
-      {/* Top Bar */}
-      <div className="bg-primary text-primary-foreground text-xs py-2 px-4 hidden md:flex justify-between items-center z-50 relative">
-        <div className="flex gap-6 max-w-7xl mx-auto w-full">
-          <span className="flex items-center gap-2"><MapPin size={14} /> Shop 3/196 Marion Road, West Richmond, Adelaide SA 5033</span>
-          <a href="tel:0414053773" className="flex items-center gap-2 hover:text-accent transition-colors"><Phone size={14} /> 0414 053 773</a>
-          <a href="mailto:info@tailorobe.com.au" className="flex items-center gap-2 ml-auto hover:text-accent transition-colors"><Mail size={14} /> info@tailorobe.com.au</a>
-        </div>
-      </div>
+     {/* Top Bar */}
+<div className="bg-primary text-primary-foreground text-xs py-2 px-4 hidden md:flex justify-between items-center z-50 relative">
+  <div className="flex items-center gap-6 max-w-7xl mx-auto w-full">
 
+    {/* Locations */}
+    <div className="flex items-center gap-4">
+      <MapPin size={14} className="shrink-0" />
+
+      <a
+        href="https://www.google.com/maps/search/?api=1&query=Shop+3%2F196+Marion+Road+West+Richmond+Adelaide+SA+5033"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-accent transition-colors"
+      >
+        <span className="font-semibold text-accent">West Richmond</span>
+      </a>
+
+      <span className="text-primary-foreground/30">|</span>
+
+      <a
+        href="https://www.google.com/maps/search/?api=1&query=2%2F117+Walkerville+Terrace+Walkerville+SA+5081"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-accent transition-colors"
+      >
+        <span className="font-semibold text-accent">Walkerville</span>
+        <span className="ml-1 text-primary-foreground/60">(New Branch)</span>
+      </a>
+    </div>
+
+    {/* Phone */}
+    <a
+      href="tel:0414053773"
+      className="flex items-center gap-2 shrink-0 hover:text-accent transition-colors"
+    >
+      <Phone size={14} />
+      0414 053 773
+    </a>
+
+    {/* Email */}
+    <a
+      href="mailto:info@tailorobe.com.au"
+      className="flex items-center gap-2 ml-auto shrink-0 hover:text-accent transition-colors"
+    >
+      <Mail size={14} />
+      info@tailorobe.com.au
+    </a>
+
+  </div>
+</div>
       {/* Navigation */}
-      <header className={cn(
-        "sticky top-0 z-40 transition-all duration-300 w-full",
-        isScrolled ? "glass-nav shadow-sm" : "bg-background/95 border-b border-transparent"
-      )}>
+      <header
+        className={cn(
+          "sticky top-0 z-40 transition-all duration-300 w-full",
+          isScrolled
+            ? "glass-nav shadow-sm"
+            : "bg-background/95 border-b border-transparent"
+        )}
+      >
         <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-32">
           <div className="flex justify-between items-center h-20">
             <Link href="/" className="flex items-center gap-3 group">
-              <span className="font-display text-2xl font-bold tracking-wider text-primary">TAILOROBE BESPOKE TAILORS</span>
+              <span className="font-display text-2xl font-bold tracking-wider text-primary">
+                TAILOROBE BESPOKE TAILORS
+              </span>
             </Link>
 
             {/* Desktop Nav */}
@@ -101,14 +174,19 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
                   href={link.href}
                   className={cn(
                     "text-sm font-medium uppercase tracking-widest hover:text-accent transition-colors relative group",
-                    pathname === link.href ? "text-accent" : "text-foreground"
+                    pathname === link.href
+                      ? "text-accent"
+                      : "text-foreground"
                   )}
                 >
                   {link.label}
-                  <span className={cn(
-                    "absolute -bottom-2 left-0 w-full h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left",
-                    pathname === link.href && "scale-x-100"
-                  )} />
+
+                  <span
+                    className={cn(
+                      "absolute -bottom-2 left-0 w-full h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform origin-left",
+                      pathname === link.href && "scale-x-100"
+                    )}
+                  />
                 </Link>
               ))}
 
@@ -119,6 +197,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
                 aria-label="Cart"
               >
                 <ShoppingCart size={20} />
+
                 {mounted && totalItems > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-accent text-primary text-[10px] font-bold flex items-center justify-center leading-none">
                     {totalItems > 9 ? "9+" : totalItems}
@@ -135,12 +214,14 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
                 aria-label="Cart"
               >
                 <ShoppingCart size={20} />
+
                 {mounted && totalItems > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full bg-accent text-primary text-[10px] font-bold flex items-center justify-center leading-none">
                     {totalItems > 9 ? "9+" : totalItems}
                   </span>
                 )}
               </Link>
+
               <button
                 className="p-2 text-foreground"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -161,18 +242,22 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
                 href={link.href}
                 className={cn(
                   "text-lg font-display py-2 border-b border-border/50",
-                  pathname === link.href ? "text-accent" : "text-foreground"
+                  pathname === link.href
+                    ? "text-accent"
+                    : "text-foreground"
                 )}
               >
                 {link.label}
               </Link>
             ))}
+
             <Link
               href="/cart"
               className="flex items-center gap-2 text-lg font-display py-2"
             >
               <ShoppingCart size={18} />
               Cart
+
               {mounted && totalItems > 0 && (
                 <span className="w-5 h-5 rounded-full bg-accent text-primary text-[10px] font-bold flex items-center justify-center">
                   {totalItems}
@@ -183,85 +268,221 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
-      <main className="flex-1 flex flex-col">
-        {children}
-      </main>
+      <main className="flex-1 flex flex-col">{children}</main>
 
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-16 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="md:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-6">
-              <span className="font-display text-3xl font-bold tracking-wider text-white">TAILOROBE</span>
+              <span className="font-display text-3xl font-bold tracking-wider text-white">
+                TAILOROBE
+              </span>
             </Link>
+
             <p className="text-primary-foreground/80 max-w-sm mb-6 leading-relaxed">
-              Adelaide&apos;s premier destination for bespoke tailoring. Crafting elegant, made-to-measure garments that reflect your personal style and uncompromising standards.
+              Adelaide&apos;s premier destination for bespoke tailoring.
+              Crafting elegant, made-to-measure garments that reflect your
+              personal style and uncompromising standards.
             </p>
+
             <div className="flex items-center gap-4">
-              <a href="https://www.instagram.com/tailorobe" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram" className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors">
+              <a
+                href="https://www.instagram.com/tailorobe"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow us on Instagram"
+                className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors"
+              >
                 <IconInstagram size={18} />
               </a>
-              <a href="https://www.facebook.com/bespoke.tailorobe" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook" className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors">
+
+              <a
+                href="https://www.facebook.com/bespoke.tailorobe"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow us on Facebook"
+                className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors"
+              >
                 <IconFacebook size={18} />
               </a>
-              <a href="https://www.tiktok.com/@tailorobe" target="_blank" rel="noopener noreferrer" aria-label="Follow us on TikTok" className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors">
+
+              <a
+                href="https://www.tiktok.com/@tailorobe"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow us on TikTok"
+                className="w-10 h-10 rounded-full border border-primary-foreground/20 flex items-center justify-center text-primary-foreground/70 hover:text-accent hover:border-accent transition-colors"
+              >
                 <IconTikTok size={18} />
               </a>
             </div>
           </div>
+
           <div>
-            <h4 className="font-display text-xl mb-6 text-accent">Quick Links</h4>
+            <h4 className="font-display text-xl mb-6 text-accent">
+              Quick Links
+            </h4>
+
             <ul className="space-y-3">
-              <li><Link href="/about" className="hover:text-accent transition-colors">About Us</Link></li>
-              <li><Link href="/services" className="hover:text-accent transition-colors">Services</Link></li>
-              <li><Link href="/builder" className="hover:text-accent transition-colors">Suit Builder</Link></li>
-              <li><Link href="/booking" className="hover:text-accent transition-colors">Book a Fitting</Link></li>
-              <li><Link href="/legal" className="hover:text-accent transition-colors">Legal Info</Link></li>
+              <li>
+                <Link
+                  href="/about"
+                  className="hover:text-accent transition-colors"
+                >
+                  About Us
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/services"
+                  className="hover:text-accent transition-colors"
+                >
+                  Services
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/builder"
+                  className="hover:text-accent transition-colors"
+                >
+                  Suit Builder
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/booking"
+                  className="hover:text-accent transition-colors"
+                >
+                  Book a Fitting
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/legal"
+                  className="hover:text-accent transition-colors"
+                >
+                  Legal Info
+                </Link>
+              </li>
             </ul>
           </div>
+
+          {/* Visit Our Stores */}
           <div>
-            <h4 className="font-display text-xl mb-6 text-accent">Visit Our Store</h4>
-            <ul className="space-y-4 text-primary-foreground/80">
-              <li className="flex items-start gap-3">
+            <h4 className="font-display text-xl mb-6 text-accent">
+              Visit Our Stores
+            </h4>
+
+            <div className="space-y-5 text-primary-foreground/80">
+              {/* West Richmond */}
+              <div className="flex items-start gap-3">
                 <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
                   <MapPin size={17} />
                 </span>
-                <span className="leading-relaxed">
-                  Shop 3/196 Marion Road<br />
-                  West Richmond, Adelaide SA 5033
+
+                <div className="leading-relaxed">
+                  <p className="text-white font-semibold mb-1">
+                    West Richmond
+                  </p>
+
+                  <p>
+                    Shop 3/196 Marion Road
+                    <br />
+                    West Richmond, Adelaide SA 5033
+                  </p>
+                </div>
+              </div>
+
+              {/* Walkerville */}
+              <div className="flex items-start gap-3">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
+                  <MapPin size={17} />
                 </span>
-              </li>
-              <li className="flex items-center gap-3">
+
+                <div className="leading-relaxed">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <p className="text-white font-semibold">
+                      Walkerville
+                    </p>
+
+                    <span className="text-[9px] uppercase tracking-widest font-bold bg-accent text-primary px-2 py-0.5 rounded-full">
+                      New Branch
+                    </span>
+                  </div>
+
+                  <p>
+                    2/117 Walkerville Terrace
+                    <br />
+                    Walkerville SA 5081
+                  </p>
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
                   <Phone size={17} />
                 </span>
-                <a href="tel:0414053773" className="hover:text-accent transition-colors">0414 053 773</a>
-              </li>
-              <li className="flex items-center gap-3">
+
+                <a
+                  href="tel:0414053773"
+                  className="hover:text-accent transition-colors"
+                >
+                  0414 053 773
+                </a>
+              </div>
+
+              {/* Email */}
+              <div className="flex items-center gap-3">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
                   <Mail size={17} />
                 </span>
-                <a href="mailto:info@tailorobe.com.au" className="hover:text-accent transition-colors break-all">info@tailorobe.com.au</a>
-              </li>
-              <li className="flex items-start gap-3 pt-2">
+
+                <a
+                  href="mailto:info@tailorobe.com.au"
+                  className="hover:text-accent transition-colors break-all"
+                >
+                  info@tailorobe.com.au
+                </a>
+              </div>
+
+              {/* Opening Hours */}
+              <div className="flex items-start gap-3 pt-2">
                 <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-accent">
                   <Clock size={17} />
                 </span>
+
                 <span className="leading-relaxed">
-                  Weekdays: 12:00PM – 7:00PM<br />
+                  Weekdays: 12:00PM – 7:00PM
+                  <br />
                   Weekends: 10:00AM – 5:00PM
                 </span>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Payment Methods */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-primary-foreground/20">
-          <p className="text-primary-foreground/50 text-xs uppercase tracking-widest mb-5 text-center">We Accept</p>
+          <p className="text-primary-foreground/50 text-xs uppercase tracking-widest mb-5 text-center">
+            We Accept
+          </p>
+
           <div className="flex flex-wrap items-center justify-center gap-3">
             {payments.map((p) => (
-              <div key={p.label} className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold tracking-wide shadow-sm" style={{ backgroundColor: p.bg, color: p.text }}>
+              <div
+                key={p.label}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold tracking-wide shadow-sm"
+                style={{
+                  backgroundColor: p.bg,
+                  color: p.text,
+                }}
+              >
                 <span className="text-base font-bold">{p.icon}</span>
                 <span>{p.label}</span>
               </div>
@@ -270,9 +491,20 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-primary-foreground/10 text-center text-primary-foreground/50 text-sm flex flex-col md:flex-row justify-between items-center gap-3">
-          <p>© {new Date().getFullYear()} Tailorobe Bespoke. All rights reserved.</p>
+          <p>
+            © {new Date().getFullYear()} Tailorobe Bespoke. All rights
+            reserved.
+          </p>
+
           <div className="flex gap-4">
-            <Link href="/admin" className="opacity-0 select-none pointer-events-none text-[0px]" aria-hidden="true" tabIndex={-1}>Admin</Link>
+            <Link
+              href="/admin"
+              className="opacity-0 select-none pointer-events-none text-[0px]"
+              aria-hidden="true"
+              tabIndex={-1}
+            >
+              Admin
+            </Link>
           </div>
         </div>
       </footer>
