@@ -368,7 +368,7 @@ export default function RootLayout({
                   address: {
                     "@type": "PostalAddress",
 
-                    streetAddress: "2/117 Walkerville Terrace",
+                    streetAddress: "Shop 2/117 Walkerville Terrace",
 
                     addressLocality: "Walkerville",
 

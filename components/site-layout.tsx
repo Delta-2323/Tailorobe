@@ -416,7 +416,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
                   </div>
 
                   <p>
-                    2/117 Walkerville Terrace
+                    Shop 2/117 Walkerville Terrace
                     <br />
                     Walkerville SA 5081
                   </p>

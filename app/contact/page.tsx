@@ -125,7 +125,7 @@ export default function Contact() {
                   <p className="text-muted-foreground mt-4">
                     <strong>Walkerville</strong>
                     <br />
-                    2/117 Walkerville Terrace
+                    Shop 2/117 Walkerville Terrace
                     <br />
                     SA 5081
                   </p>
@@ -230,14 +230,14 @@ export default function Contact() {
                     Walkerville
                   </h4>
                   <p className="text-xs text-muted-foreground mt-1">
-                    2/117 Walkerville Terrace
+                    Shop 2/117 Walkerville Terrace
                   </p>
                 </div>
 
                 <div className="h-64">
                   <iframe
                     title="Tailorobe Walkerville Location"
-                    src="https://maps.google.com/maps?q=2%2F117%20Walkerville%20Terrace%2C%20Walkerville%20SA%205081%2C%20Australia&z=16&output=embed"
+                    src="https://maps.google.com/maps?q=Shop%202%2F117%20Walkerville%20Terrace%2C%20Walkerville%20SA%205081%2C%20Australia&z=16&output=embed"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
@@ -248,7 +248,7 @@ export default function Contact() {
 
                 <div className="px-4 py-3 bg-card">
                   <a
-                    href="https://maps.google.com/?q=2%2F117+Walkerville+Terrace%2C+Walkerville+SA+5081%2C+Australia"
+                    href="https://maps.google.com/?q=Shop%202%2F117%20Walkerville%20Terrace%2C%20Walkerville%20SA%205081%2C%20Australia"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-xs text-muted-foreground hover:text-accent transition-colors underline underline-offset-4"
