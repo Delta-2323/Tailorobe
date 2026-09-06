@@ -20,6 +20,7 @@ function createTransport() {
 ========================= */
 function row(label: string, value?: string | null) {
   if (!value) return "";
+
   return `
     <tr>
       <td style="padding:10px 12px;color:#6b7280;font-weight:500;border-bottom:1px solid #f3f4f6;">
@@ -28,13 +29,19 @@ function row(label: string, value?: string | null) {
       <td style="padding:10px 12px;color:#111827;border-bottom:1px solid #f3f4f6;">
         ${value}
       </td>
-    </tr>`;
+    </tr>
+  `;
 }
 
 /* =========================
    EMAIL TEMPLATE
 ========================= */
-function emailShell(title: string, badge: string, badgeColor: string, rows: string) {
+function emailShell(
+  title: string,
+  badge: string,
+  badgeColor: string,
+  rows: string
+) {
   return `
   <!DOCTYPE html>
   <html>
@@ -46,7 +53,10 @@ function emailShell(title: string, badge: string, badgeColor: string, rows: stri
         <p style="margin:0;color:#d4af37;font-size:12px;letter-spacing:2px;text-transform:uppercase;">
           Tailorobe Bespoke Tailors
         </p>
-        <h2 style="color:#fff;margin:8px 0 0;">${title}</h2>
+
+        <h2 style="color:#fff;margin:8px 0 0;">
+          ${title}
+        </h2>
       </div>
 
       <div style="padding:15px 25px;">
@@ -88,7 +98,12 @@ export async function sendContactEmail(data: {
     from: `"Tailorobe Website" <${process.env.GMAIL_USER}>`,
     to: STORE_EMAIL,
     subject: `New Contact Message — ${data.subject}`,
-    html: emailShell("New Contact Message", "CONTACT", "#2c3e2d", adminRows),
+    html: emailShell(
+      "New Contact Message",
+      "CONTACT",
+      "#2c3e2d",
+      adminRows
+    ),
   });
 
   const customerEmail = data.email
@@ -96,7 +111,12 @@ export async function sendContactEmail(data: {
         from: `"Tailorobe" <${process.env.GMAIL_USER}>`,
         to: data.email,
         subject: "We received your message - Tailorobe",
-        html: emailShell("Message Received ✔", "CONTACT", "#16a34a", adminRows),
+        html: emailShell(
+          "Message Received ✔",
+          "CONTACT",
+          "#16a34a",
+          adminRows
+        ),
       })
     : null;
 
@@ -109,9 +129,17 @@ export async function sendContactEmail(data: {
 export async function sendBookingEmails(data: any) {
   const transporter = createTransport();
 
+  /*
+   * Use the store selected by the customer.
+   * Falls back to Marion Road if storeLocation
+   * was not included for any reason.
+   */
   const locationText =
     data.locationType === "store"
-      ? "In Store — Shop 3/196 Marion Road, West Richmond SA 5033"
+      ? `In Store — ${
+          data.storeLocation ||
+          "Shop 3/196 Marion Road, West Richmond SA 5033"
+        }`
       : `Remote — ${data.remoteLocation}`;
 
   const adminRows =
@@ -139,7 +167,12 @@ export async function sendBookingEmails(data: any) {
     from: `"Tailorobe Bookings" <${process.env.GMAIL_USER}>`,
     to: STORE_EMAIL,
     subject: `New Appointment — ${data.customerName}`,
-    html: emailShell("New Appointment Booked", "APPOINTMENT", "#2c3e2d", adminRows),
+    html: emailShell(
+      "New Appointment Booked",
+      "APPOINTMENT",
+      "#2c3e2d",
+      adminRows
+    ),
   });
 
   const customerEmail = data.customerEmail
@@ -147,7 +180,12 @@ export async function sendBookingEmails(data: any) {
         from: `"Tailorobe" <${process.env.GMAIL_USER}>`,
         to: data.customerEmail,
         subject: "Your Appointment is Confirmed - Tailorobe",
-        html: emailShell("Booking Confirmed 🎉", "CONFIRMED", "#16a34a", customerRows),
+        html: emailShell(
+          "Booking Confirmed 🎉",
+          "CONFIRMED",
+          "#16a34a",
+          customerRows
+        ),
       })
     : null;
 
