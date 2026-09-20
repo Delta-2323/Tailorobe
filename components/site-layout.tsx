@@ -158,16 +158,16 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
             : "bg-background/95 border-b border-transparent"
         )}
       >
-        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-32">
-          <div className="flex justify-between items-center h-20">
+        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-24">
+          <div className="flex justify-between items-center h-20 md:h-24 lg:h-24 xl:h-20">
             <Link href="/" className="flex items-center gap-3 group">
-              <span className="font-display text-2xl font-bold tracking-wider text-primary">
+              <span className="font-display text-lg md:text-xl lg:text-xl xl:text-2xl font-bold tracking-wider text-primary">
                 TAILOROBE BESPOKE TAILORS
               </span>
             </Link>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-8">
+            <nav className="hidden md:flex items-center gap-5 lg:gap-6 xl:gap-8 2xl:gap-10">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -272,8 +272,8 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
 
       {/* Footer */}
       <footer className="bg-primary text-primary-foreground py-16 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="md:col-span-2">
+        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16">
+          <div className="md:col-span-2 lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-6">
               <span className="font-display text-3xl font-bold tracking-wider text-white">
                 TAILOROBE
@@ -468,7 +468,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Payment Methods */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-primary-foreground/20">
+        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-24 mt-12 pt-8 border-t border-primary-foreground/20">
           <p className="text-primary-foreground/50 text-xs uppercase tracking-widest mb-5 text-center">
             We Accept
           </p>
@@ -490,7 +490,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-primary-foreground/10 text-center text-primary-foreground/50 text-sm flex flex-col md:flex-row justify-between items-center gap-3">
+            <div className="max-w-[1800px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-24 mt-8 pt-6 border-t border-primary-foreground/10 text-center text-primary-foreground/50 text-sm flex flex-col md:flex-row justify-between items-center gap-3">
           <p>
             © {new Date().getFullYear()} Tailorobe Bespoke. All rights
             reserved.
