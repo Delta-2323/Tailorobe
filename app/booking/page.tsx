@@ -717,6 +717,30 @@ export default function Booking() {
                     )
                   )}
                 </div>
+
+                {form.storeLocation === "walkerville" && (
+                  <div
+                    role="status"
+                    className="mt-4 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950"
+                  >
+                    <p className="font-semibold">
+                      Walkerville store renovation notice
+                    </p>
+                    <p className="mt-1 leading-relaxed">
+                      Our Walkerville store is currently undergoing renovations
+                      and is expected to reopen in approximately 2–3 weeks.
+                      Please contact us on{" "}
+                      <a
+                        href="tel:0414053773"
+                        className="font-semibold underline underline-offset-2"
+                      >
+                        0414 053 773
+                      </a>{" "}
+                      to confirm availability before booking this location.
+                      Our Marion Road store remains available.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 

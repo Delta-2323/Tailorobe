@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   motion,
+  AnimatePresence,
   useScroll,
   useTransform,
   useSpring,
@@ -11,6 +12,7 @@ import {
 } from "framer-motion";
 import { Scissors, Ruler, Sparkles, ArrowRight } from "lucide-react";
 import Script from "next/script";
+import { useEffect, useState } from "react";
 
 const PREVIEW_IMAGES = [
   "gallery-01.jpg",
@@ -168,9 +170,162 @@ function ScrollMorphHero() {
 }
 
 export default function Home() {
+  const [summerSaleOpen, setSummerSaleOpen] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setSummerSaleOpen(true), 2000);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!summerSaleOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSummerSaleOpen(false);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [summerSaleOpen]);
+
   return (
     <div className="relative w-full overflow-x-hidden">
       <ScrollMorphHero />
+
+      {/* Premium Summer Sale popup with smooth entrance and exit animations */}
+      <AnimatePresence>
+        {summerSaleOpen && (
+          <motion.div
+            className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-[#07110c]/75 p-3 backdrop-blur-md sm:p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.50, ease: "easeOut" }}
+            onClick={() => setSummerSaleOpen(false)}
+          >
+            <motion.section
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="summer-sale-title"
+              onClick={(event) => event.stopPropagation()}
+              initial={{ opacity: 0, y: 35, scale: 0.92, rotateX: 5 }}
+              animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+              exit={{ opacity: 0, y: 18, scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 230, damping: 24, mass: 0.85 }}
+              className="relative my-auto grid w-full max-w-4xl overflow-hidden rounded-2xl border border-[#d6bd8b]/50 bg-[#f7f3eb] text-[#202c25] shadow-[0_35px_100px_rgba(0,0,0,0.45)] sm:grid-cols-[0.95fr_1.05fr]"
+            >
+              <button
+                type="button"
+                aria-label="Close summer sale popup"
+                onClick={() => setSummerSaleOpen(false)}
+                className="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/25 text-2xl text-white backdrop-blur-md transition duration-200 hover:rotate-90 hover:bg-black/50 focus:outline-none focus:ring-2 focus:ring-[#d6bd8b] sm:right-4 sm:top-4"
+              >
+                &times;
+              </button>
+
+              {/* Editorial image panel */}
+              <div className="group relative flex min-h-[220px] flex-col justify-end overflow-hidden bg-[#17251e] px-7 pb-7 pt-12 text-white sm:min-h-[480px] sm:px-9 sm:pb-10">
+                <motion.img
+                  src="https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=85&w=1200&auto=format&fit=crop"
+                  alt="Elegant tailored menswear"
+                  className="absolute inset-0 h-full w-full object-cover object-center"
+                  initial={{ scale: 1.16 }}
+                  animate={{ scale: 1.04 }}
+                  transition={{ duration: 2.2, ease: [0.22, 1, 0.36, 1] }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#101b14]/95 via-[#101b14]/35 to-[#101b14]/20" />
+                <motion.div
+                  className="absolute left-0 top-0 h-[3px] bg-[#d6bd8b]"
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 1.1, delay: 0.25, ease: "easeInOut" }}
+                />
+                <motion.div
+                  className="relative z-10"
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, delay: 0.18 }}
+                >
+                  <p className="mb-3 text-[9px] font-medium uppercase tracking-[0.38em] text-[#e5d1a7]">
+                    Made for your moment
+                  </p>
+                  <span className="block text-2xl font-semibold tracking-[0.22em] sm:text-3xl">
+                    TAILOROBE
+                  </span>
+                  <span className="mt-2 block text-[9px] tracking-[0.4em] text-white/80">
+                    BESPOKE TAILORS · ADELAIDE
+                  </span>
+                </motion.div>
+              </div>
+
+              {/* Sale message */}
+              <div className="relative flex flex-col items-start justify-center overflow-hidden px-7 py-9 sm:px-10 sm:py-14">
+                <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full border border-[#b59a68]/20" />
+                <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full border border-[#b59a68]/20" />
+                <motion.div
+                  className="relative z-10 w-full"
+                  initial="hidden"
+                  animate="show"
+                  variants={{
+                    hidden: {},
+                    show: { transition: { staggerChildren: 0.11, delayChildren: 0.18 } },
+                  }}
+                >
+                  <motion.p
+                    variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
+                    transition={{ duration: 0.45 }}
+                    className="mb-4 flex items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.3em] text-[#88734e]"
+                  >
+                    <span className="h-px w-7 bg-[#b59a68]" /> The Season of Style
+                  </motion.p>
+                  <motion.h2
+                    id="summer-sale-title"
+                    variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="font-display text-[2.65rem] leading-[1.03] tracking-[-0.045em] sm:text-6xl"
+                  >
+                    Summer Sale
+                    <br />
+                    <span className="font-normal italic text-[#9a8051]">is here.</span>
+                  </motion.h2>
+                  <motion.p
+                    variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
+                    transition={{ duration: 0.45 }}
+                    className="my-5 max-w-sm text-sm leading-7 text-[#64665e] sm:my-6"
+                  >
+                    A new season calls for a fresh look. Discover considered details,
+                    refined fits and timeless style, tailored around you.
+                  </motion.p>
+                  <motion.div
+                    variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
+                    transition={{ duration: 0.45 }}
+                    className="w-full"
+                  >
+                    <Link
+                      href="/booking"
+                      onClick={() => setSummerSaleOpen(false)}
+                      className="group relative flex min-h-[54px] w-full items-center justify-center gap-3 overflow-hidden bg-[#24362b] px-5 py-4 text-center text-[10px] font-semibold tracking-[0.16em] text-[#fffaf0] transition-colors duration-300 hover:bg-[#354c3c] focus:outline-none focus:ring-2 focus:ring-[#b59a68] focus:ring-offset-2"
+                    >
+                      <span className="absolute inset-y-0 -left-1/2 w-1/3 skew-x-[-22deg] bg-white/10 transition-all duration-700 group-hover:left-[120%]" />
+                      <span className="relative">BOOK YOUR FITTING</span>
+                      <ArrowRight size={16} className="relative transition-transform duration-300 group-hover:translate-x-1.5" />
+                    </Link>
+                  </motion.div>
+                  <motion.button
+                    type="button"
+                    variants={{ hidden: { opacity: 0 }, show: { opacity: 1 } }}
+                    transition={{ duration: 0.4 }}
+                    onClick={() => setSummerSaleOpen(false)}
+                    className="mt-4 w-full py-2 text-center text-[11px] text-[#77776f] underline decoration-[#b8ad9b] underline-offset-4 transition-colors hover:text-[#24362b]"
+                  >
+                    Maybe later
+                  </motion.button>
+                </motion.div>
+              </div>
+            </motion.section>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Features Section */}
       <section className="py-16 sm:py-20 lg:py-24 bg-background">
